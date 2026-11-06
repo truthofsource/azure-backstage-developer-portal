@@ -1,0 +1,29 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-directory-worker",
+    "title": "Workforce directory worker",
+    "description": "Workforce directory worker",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/apps/directory-worker",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/employee-microsoft-account-creation.md",
+        "title": "Staff account operations"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "resource:default/workforce-entra",
+      "resource:default/workforce-sql"
+    ]
+  }
+}

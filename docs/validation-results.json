@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-06",
+  "originalReleaseEvaluatorTests": 9,
+  "originalLinuxPreflightTests": 10,
+  "publicReferenceTests": 5,
+  "terraformMockTests": 2,
+  "composeAndWriterOverlayContract": "passed",
+  "terraformValidate": "passed",
+  "actionlint": "passed",
+  "trivySecretFindings": 0,
+  "browser": {
+    "catalogEntities": 16,
+    "fourEvaluatorStates": true,
+    "tabNavigation": true,
+    "mobile390": true,
+    "browserErrors": 0,
+    "externalRequests": 0,
+    "actualBackstageRuntime": false,
+    "liveEntraTested": false
+  },
+  "cloudChanges": false,
+  "actionsDispatched": false,
+  "fullBackstageBuild": false,
+  "liveSignIn": false,
+  "liveBackupRestore": false,
+  "linuxShellSyntaxChecks": 9
+}

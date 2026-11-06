@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Workforce Backstage release observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "componentRef",
+    "environment",
+    "state",
+    "observedAt",
+    "sourceSha",
+    "artifactSha256",
+    "imageDigest",
+    "runUrl"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "componentRef": {
+      "type": "string",
+      "pattern": "^component:default/[a-z0-9-]+$"
+    },
+    "environment": {
+      "enum": [
+        "production",
+        "nonproduction"
+      ]
+    },
+    "state": {
+      "enum": [
+        "unknown",
+        "verified",
+        "stale",
+        "conflict"
+      ]
+    },
+    "observedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "sourceSha": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "artifactSha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "imageDigest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "runUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^https://github.com/truthofsource/workforce-platform/actions/runs/[1-9][0-9]*$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "verified"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "observedAt": {
+            "type": "string"
+          },
+          "sourceSha": {
+            "type": "string"
+          },
+          "runUrl": {
+            "type": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "properties": {
+              "artifactSha256": {
+                "type": "string"
+              },
+              "imageDigest": {
+                "type": "null"
+              }
+            }
+          },
+          {
+            "properties": {
+              "artifactSha256": {
+                "type": "null"
+              },
+              "imageDigest": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "System",
+  "metadata": {
+    "name": "workforce",
+    "title": "Workforce business platform",
+    "description": "Production workforce and administrative platform. Catalog metadata is separate from business records."
+  },
+  "spec": {
+    "owner": "group:default/workforce-engineering"
+  }
+}

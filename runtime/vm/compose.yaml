@@ -1,0 +1,142 @@
+# Prepared single-VM runtime. Do not start until the runbook commissioning checks pass.
+# All image references must be immutable repository@sha256 digests.
+name: backstage
+services:
+  postgres:
+    image: ${BACKSTAGE_POSTGRES_IMAGE:?pin PostgreSQL 16 image digest}
+    container_name: backstage-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: backstage
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin_password
+    secrets:
+      - postgres_password
+      - postgres_admin_password
+    volumes:
+      - /var/lib/backstage/postgres:/var/lib/postgresql/data
+      - ./init-postgres.sh:/docker-entrypoint-initdb.d/01-backstage.sh:ro
+    networks:
+      - database
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U backstage -d backstage']
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  backstage:
+    image: ${BACKSTAGE_IMAGE:?pin published Backstage ACR digest}
+    container_name: backstage-portal
+    restart: unless-stopped
+    command: [/bin/sh, /app/start-vm.sh]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      BACKSTAGE_HOSTED_ENABLE: 'true'
+      BACKSTAGE_HOSTED_PROFILE: vm
+      BACKSTAGE_BASE_URL: https://${BACKSTAGE_DOMAIN:?set reviewed DNS name}
+      BACKSTAGE_POSTGRES_HOST: postgres
+      BACKSTAGE_POSTGRES_USER: backstage
+      BACKSTAGE_ENTRA_CLIENT_ID: ${BACKSTAGE_ENTRA_CLIENT_ID:?set app client ID}
+      BACKSTAGE_ENTRA_TENANT_ID: ${BACKSTAGE_TENANT_ID:?set exact tenant ID}
+      BACKSTAGE_CATALOG_URL: ${BACKSTAGE_CATALOG_URL:?set reviewed catalog URL}
+      BACKSTAGE_ENGINEER_USER_REFS: ${BACKSTAGE_ENGINEER_USER_REFS:?set approved engineer refs}
+      BACKSTAGE_GITHUB_APP_ID: ${BACKSTAGE_GITHUB_APP_ID:?set scoped GitHub app ID}
+      BACKSTAGE_GITHUB_APP_CLIENT_ID: ${BACKSTAGE_GITHUB_APP_CLIENT_ID:?set GitHub app client ID}
+      BACKSTAGE_API_PROOF_ENABLED: ${BACKSTAGE_API_PROOF_ENABLED:-false}
+      BACKSTAGE_WEB_PROOF_ENABLED: ${BACKSTAGE_WEB_PROOF_ENABLED:-false}
+      BACKSTAGE_SCANNER_PROOF_ENABLED: ${BACKSTAGE_SCANNER_PROOF_ENABLED:-false}
+      BACKSTAGE_TEMPLATES_ENABLED: ${BACKSTAGE_TEMPLATES_ENABLED:-false}
+    secrets:
+      - postgres_password
+      - backstage_entra_client_secret
+      - github_app_client_secret
+      - github_app_private_key
+      - github_app_webhook_secret
+    volumes:
+      - /var/lib/backstage/techdocs:/var/lib/backstage/techdocs:ro
+      - ${BACKSTAGE_ENGINEER_ROSTER_FILE:?set protected engineer roster}:/app/engineers.yaml:ro
+    networks:
+      - edge
+      - database
+
+  oauth2-proxy:
+    image: ${BACKSTAGE_OAUTH_IMAGE:?pin OAuth2 Proxy digest}
+    container_name: backstage-auth
+    restart: unless-stopped
+    command:
+      - --provider=entra-id
+      - --oidc-issuer-url=https://login.microsoftonline.com/${BACKSTAGE_TENANT_ID:?set exact tenant ID}/v2.0
+      - --client-id=${BACKSTAGE_INGRESS_CLIENT_ID:?set ingress app client ID}
+      - --client-secret-file=/run/secrets/ingress_client_secret
+      - --cookie-secret-file=/run/secrets/ingress_cookie_secret
+      - --redirect-url=https://${BACKSTAGE_DOMAIN:?set reviewed DNS name}/oauth2/callback
+      - --allowed-group=${BACKSTAGE_ENGINEER_GROUP_ID:?set reviewed engineer group ID}
+      - --scope=openid profile email offline_access User.Read
+      - --code-challenge-method=S256
+      - --email-domain=*
+      - --http-address=0.0.0.0:4180
+      - --upstream=static://202
+      - --reverse-proxy=true
+      - --cookie-secure=true
+      - --cookie-name=__Host-backstage-auth
+      - --cookie-samesite=lax
+      - --cookie-refresh=1h
+      - --cookie-expire=8h
+      - --pass-user-headers=false
+      - --pass-access-token=false
+      - --request-logging=false
+    secrets:
+      - ingress_client_secret
+      - ingress_cookie_secret
+    networks:
+      edge:
+        ipv4_address: 172.30.80.3
+
+  caddy:
+    image: ${BACKSTAGE_CADDY_IMAGE:?pin Caddy digest}
+    container_name: backstage-edge
+    restart: unless-stopped
+    depends_on:
+      - oauth2-proxy
+      - backstage
+    environment:
+      BACKSTAGE_DOMAIN: ${BACKSTAGE_DOMAIN:?set reviewed DNS name}
+    ports:
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /var/lib/backstage/caddy-data:/data
+      - /var/lib/backstage/caddy-config:/config
+    networks:
+      edge:
+        ipv4_address: 172.30.80.2
+
+secrets:
+  postgres_admin_password:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/postgres_admin_password
+  postgres_password:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/postgres_password
+  backstage_entra_client_secret:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/backstage_entra_client_secret
+  github_app_client_secret:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/github_app_client_secret
+  github_app_private_key:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/github_app_private_key
+  github_app_webhook_secret:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/github_app_webhook_secret
+  ingress_client_secret:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/ingress_client_secret
+  ingress_cookie_secret:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/ingress_cookie_secret
+
+networks:
+  edge:
+    ipam:
+      config:
+        - subnet: 172.30.80.0/24
+          ip_range: 172.30.80.128/25
+          gateway: 172.30.80.1
+  database:
+    internal: true

@@ -1,0 +1,26 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-infrastructure",
+    "title": "Workforce infrastructure definitions",
+    "description": "Workforce infrastructure definitions",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/infra",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/architecture/terraform-environment-ownership.md",
+        "title": "Terraform ownership"
+      }
+    ]
+  },
+  "spec": {
+    "type": "library",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": []
+  }
+}

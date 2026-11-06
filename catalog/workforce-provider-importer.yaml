@@ -1,0 +1,33 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-provider-importer",
+    "title": "Provider import worker",
+    "description": "Provider import worker",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/apps/provider-importer",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/provider-mfa-reconnection.md",
+        "title": "MFA recovery"
+      },
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/provider-import-operations.md",
+        "title": "Import operations"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "component:default/workforce-api",
+      "resource:default/workforce-private-storage"
+    ]
+  }
+}

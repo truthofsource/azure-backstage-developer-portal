@@ -1,0 +1,329 @@
+{
+  "reviewedDate": "2026-11-06",
+  "files": [
+    {
+      "source": "platform/backstage/releases/evaluate.py",
+      "sourceSha256": "b24c97006ba84726cbdf013ac6728c932c71ea51078a35f5daf9fc858a544055",
+      "publicFile": "reference/releases/evaluate.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/releases/test_evaluate.py",
+      "sourceSha256": "b115124384d7d4ed84f6583145b3d33d398f8b9f875158e8aa1e2ff28b8de6ea",
+      "publicFile": "reference/releases/test_evaluate.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/releases/release-view.schema.json",
+      "sourceSha256": "dbbb9b82df85d2adb1fff4fbfb64999588aee9cc58915aa6b0b1ccb3efdaaf16",
+      "publicFile": "reference/releases/release-view.schema.json",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/releases/unknown.example.json",
+      "sourceSha256": "fd60d9c4b8dde665b22182adc422b01cb84b898e21ca1ac9b9dde5b182a2afe1",
+      "publicFile": "reference/releases/unknown.example.json",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/compose.yaml",
+      "sourceSha256": "ca22147bb2c7473620300b6d0533875ea409710ecf432e91db6e7af438657c21",
+      "publicFile": "runtime/vm/compose.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/compose.templates.yaml",
+      "sourceSha256": "4ce26b0517d225974c2aba2cfbfe85206576283ecd83a29e0e0d2030fc4de202",
+      "publicFile": "runtime/vm/compose.templates.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/Caddyfile",
+      "sourceSha256": "70ed4d421322fa50e2cc7da2254ba6c58ba655da35516e41b93ba6ea432397e2",
+      "publicFile": "runtime/vm/Caddyfile",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/preflight.py",
+      "sourceSha256": "2a0f5f53237f7b227c840bf4e19689db55168bb727835c6f1cde7c4e45ef3df7",
+      "publicFile": "runtime/vm/preflight.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/test_preflight.py",
+      "sourceSha256": "ec9ebce033e1d2c7b7237b48e706fc82698ae589e3f422bf92a4c323549ab54d",
+      "publicFile": "runtime/vm/test_preflight.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/check-compose.py",
+      "sourceSha256": "a6bcc703369b66856303ffdbef4a4e14f4123f1cc7e5d407dfcfeb1c77e727b1",
+      "publicFile": "runtime/vm/check-compose.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/bootstrap-host.sh",
+      "sourceSha256": "8fce04cb44b1499dc3b9f1a657eba25bb8e38514fd203a96f4d3644fbf3da22f",
+      "publicFile": "runtime/vm/bootstrap-host.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backup-session.sh",
+      "sourceSha256": "fa38f311cbdc9bda7b17a975fbf3928c5a4430b0c81683dcad4e6e82d737f5f5",
+      "publicFile": "runtime/vm/backup-session.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backup-postgres.sh",
+      "sourceSha256": "1d224b8805cb6c71eb761032fb5b23564c75145b6641ab69b19ba497237ca2a9",
+      "publicFile": "runtime/vm/backup-postgres.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backup-techdocs.sh",
+      "sourceSha256": "101a19e60d0e5b24a8eebce439ecf58584660c46f30eec71bbc72d9794a63fda",
+      "publicFile": "runtime/vm/backup-techdocs.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/snapshot_cluster.py",
+      "sourceSha256": "aaaf4aba724ca05a8072a89f1bb459b4ef37299990203c20e931f9344226092d",
+      "publicFile": "runtime/vm/snapshot_cluster.py",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/check-restore.sh",
+      "sourceSha256": "0b36e55510b5d191e60ed9518bdd6747084fc721b536e3856ca5e9b858584b12",
+      "publicFile": "runtime/vm/check-restore.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/init-postgres.sh",
+      "sourceSha256": "297668f1cd4a31475d5f57ade21beee0dde962d12f3b4133ebb6c1394960bb2d",
+      "publicFile": "runtime/vm/init-postgres.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/stack-command.sh",
+      "sourceSha256": "d3816a1bc1100bf43996ce235654f8cdcfd45b51fe0ad49c449cc9c36e7f8a65",
+      "publicFile": "runtime/vm/stack-command.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/pull-images.sh",
+      "sourceSha256": "70a667fc344995d929ecb466ac95889ad8664d3638c87174ad80e6af48529f5f",
+      "publicFile": "runtime/vm/pull-images.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backstage-stack.service.example",
+      "sourceSha256": "40e8c342b717209f4320d9da07af026a9059f80ab7c2678add1230622c752269",
+      "publicFile": "runtime/vm/backstage-stack.service.example",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backstage-backup.service.example",
+      "sourceSha256": "94dc990e8dd026c6d50dca31f573283b1c2c501058151044d457aac60ce6d822",
+      "publicFile": "runtime/vm/backstage-backup.service.example",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/backstage-backup.timer.example",
+      "sourceSha256": "7a44d52b27240210532c3ca16b960ffaa3860998631fe9498ae6026b6a819d7a",
+      "publicFile": "runtime/vm/backstage-backup.timer.example",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/hosting/vm/vm.env.example",
+      "sourceSha256": "1425a4b023bb585b49ca5b1ba4456047cca3d43739d25e20210a31a43498b733",
+      "publicFile": "runtime/vm/vm.env.example",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/packages/backend/src/index.ts",
+      "sourceSha256": "51b172308c88211c22e6c82decbd920c990bf6cb5fea022055e8ec946214912b",
+      "publicFile": "reference/backend/index.ts",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/packages/backend/src/permissionPolicy.ts",
+      "sourceSha256": "4acf762214dde8b30ea01888403fd3c6b5e931a6bf2def254096b5eb99b7f9ab",
+      "publicFile": "reference/backend/permissionPolicy.ts",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/packages/backend/Dockerfile",
+      "sourceSha256": "0e76b273ef43e95edecaa8f879e2c1ac9c853a5c6f29ecff7e184055af56c67d",
+      "publicFile": "reference/backend/Dockerfile",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/packages/backend/start-vm.sh",
+      "sourceSha256": "55bd3dee45bfca4d25c970db4f2e287f1de7806fafaf826acb236a94e4795b3d",
+      "publicFile": "runtime/vm/start-vm.sh",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/packages/app/src/App.tsx",
+      "sourceSha256": "04d5dd11cf6ef3f65031b0a4d6e5a447a6226b65cd6dd76325075717bd277947",
+      "publicFile": "reference/frontend/App.tsx",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/app-config.production.yaml",
+      "sourceSha256": "a764087cdebde52eaf127859f3b59859c60cf4a192c80840f5927adb092adcb6",
+      "publicFile": "reference/config/app-config.production.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/app-config.vm.yaml",
+      "sourceSha256": "0702971cf0a253f599d2977379aaab6dda4699549d501d00071a42ee0a6794d9",
+      "publicFile": "reference/config/app-config.vm.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/app/backstage.json",
+      "sourceSha256": "e27ef2498d13683514b07a02c9a1e169e264b713fdf1e0aaf541484da83f2b26",
+      "publicFile": "reference/config/backstage.json",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-api.yaml",
+      "sourceSha256": "a8bdf4f7edf67f5c151dbf72123e9d5b83ae66ee4d13429a23333bd6e0a8f054",
+      "publicFile": "catalog/workforce-api.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-provider-importer.yaml",
+      "sourceSha256": "89821fe0ac1f8cec8027df925bde0cc898f7df5beca19760b0011c2339716cd9",
+      "publicFile": "catalog/workforce-provider-importer.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-directory-worker.yaml",
+      "sourceSha256": "3e5e6d2ab87fb4b0cc5c5a3442cbdb4ece60f64898a4f319f3fbba043d432d95",
+      "publicFile": "catalog/workforce-directory-worker.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-document-scanner.yaml",
+      "sourceSha256": "a33ee79e791c2ca567a25d4b96cbc84e396b6e7dd936c254dbee7406d9d925c1",
+      "publicFile": "catalog/workforce-document-scanner.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-engineering.yaml",
+      "sourceSha256": "e2a5a703b0d9929e23522e0771f47033c84a5271d77c51a4ff3c0d1b8e22563c",
+      "publicFile": "catalog/workforce-engineering.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-entra.yaml",
+      "sourceSha256": "1276c00dbd02460cde0198f74de2bb8a0e2452d1ebf20c3dec175bbab3aa9ff0",
+      "publicFile": "catalog/workforce-entra.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-fowler-workers.yaml",
+      "sourceSha256": "69b2c233db580f70999b722951f689a023e4ae2f0bb58285cdc181d999e4dce7",
+      "publicFile": "catalog/workforce-fowler-workers.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-hub-observability.yaml",
+      "sourceSha256": "43a67a0770ba1d0dfbbcf04cde09a8e6dad78d06b14054e93976a1ef52f27614",
+      "publicFile": "catalog/workforce-hub-observability.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-infrastructure.yaml",
+      "sourceSha256": "13ed8af532af38e332b75f729ebb8e27c49424c3c9f04cc9891240d085dd1069",
+      "publicFile": "catalog/workforce-infrastructure.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-key-vault.yaml",
+      "sourceSha256": "7dad1104d02271c783571962b2af1b0c55464fab25fe54e8ac6d76058d4a4af4",
+      "publicFile": "catalog/workforce-key-vault.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-private-storage.yaml",
+      "sourceSha256": "c1546d6400b96cba5a06be0da60240ea19710df3a60c2b4a389311e607c74401",
+      "publicFile": "catalog/workforce-private-storage.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-relias-worker.yaml",
+      "sourceSha256": "407d657bfd3d2e13c05ab3ef375255c30724517b08561df93ed7035f49f1a549",
+      "publicFile": "catalog/workforce-relias-worker.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-screening-worker.yaml",
+      "sourceSha256": "8f8d7d6f097e3b1b500053f03d8466ce7039b77900eef6ee1f7c7c3f3984e70c",
+      "publicFile": "catalog/workforce-screening-worker.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-sql.yaml",
+      "sourceSha256": "4375a6ecb04926163770e62ae02c7d6399e511029aa992d1a07ee24356aefefe",
+      "publicFile": "catalog/workforce-sql.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce-web.yaml",
+      "sourceSha256": "05e3bac77bc086864210ff6b2d53dc2da77dae42d06ea6be319070fd829067a5",
+      "publicFile": "catalog/workforce-web.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog/workforce.yaml",
+      "sourceSha256": "3250cd852345a4d0912a85b63a3132130ef65ae105c79357b1342a8aab85214c",
+      "publicFile": "catalog/workforce.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "platform/backstage/catalog-info.yaml",
+      "sourceSha256": "6ec7d808f7c37dd95e56c36b77931289168206725a2e9228c83919ceedd78190",
+      "publicFile": "catalog-info.yaml",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/network.tf",
+      "sourceSha256": "efdd1638900cb85d099d085e15f93a5c42b638228e8632e4d026b4f98729a77b",
+      "publicFile": "infra/network.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/low-cost-vm.tf",
+      "sourceSha256": "064d1ec637d97d794368e50fc2a979743eaed4b12a1a489e0a165e6a3559c117",
+      "publicFile": "infra/low-cost-vm.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/low-cost-vm-acr.tf",
+      "sourceSha256": "893ac466e9aacc36c571ed887b4a35ee76885b6d4524fbc35651d17c61d4be33",
+      "publicFile": "infra/low-cost-vm-acr.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/low-cost-vm-backup.tf",
+      "sourceSha256": "105ce0fe7c3d507547100a32965681ed05ce488215ae87802908d7cde28be779",
+      "publicFile": "infra/low-cost-vm-backup.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/variables.tf",
+      "sourceSha256": "56beaccf2b1d4a5b96ace68ba11e38acd151ebf7fcd6763c9dcf9dd9ee444634",
+      "publicFile": "infra/variables.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    },
+    {
+      "source": "infra/platform/backstage/providers.tf",
+      "sourceSha256": "291e27199df47c710c6a38944408b0e03b8d61b731ba66d9846683fa6cbff00b",
+      "publicFile": "infra/providers.tf",
+      "adaptations": "Consistent example names/domains; see SOURCE-MAP for structural changes."
+    }
+  ]
+}

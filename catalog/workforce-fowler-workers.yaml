@@ -1,0 +1,28 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-fowler-workers",
+    "title": "Fowler connection and retrieval workers",
+    "description": "Fowler connection and retrieval workers",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/scripts/fowler",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/fowler-connection.md",
+        "title": "Fowler connection"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "component:default/workforce-api"
+    ]
+  }
+}

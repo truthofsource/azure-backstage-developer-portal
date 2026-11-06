@@ -1,0 +1,20 @@
+[Unit]
+Description=Backstage engineering portal VM stack
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+Wants=backstage-backup.timer
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/backstage/vm
+ExecStartPre=/usr/bin/python3 /opt/backstage/vm/preflight.py /etc/backstage/vm.env
+ExecStartPre=/bin/bash /opt/backstage/vm/stack-command.sh validate
+ExecStart=/bin/bash /opt/backstage/vm/stack-command.sh start
+ExecStop=/bin/bash /opt/backstage/vm/stack-command.sh stop
+TimeoutStartSec=300
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

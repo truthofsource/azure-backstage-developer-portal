@@ -1,0 +1,12 @@
+[Unit]
+Description=Periodic Backstage backup during active engineering sessions only
+PartOf=backstage-stack.service
+After=backstage-stack.service
+
+[Timer]
+OnActiveSec=30min
+OnUnitActiveSec=4h
+Persistent=false
+Unit=backstage-backup.service
+
+# Started by backstage-stack.service, never enabled at boot or used to start a VM.

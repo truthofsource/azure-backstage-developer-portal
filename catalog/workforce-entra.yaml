@@ -1,0 +1,24 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Resource",
+  "metadata": {
+    "name": "workforce-entra",
+    "title": "Workforce Entra identity boundary",
+    "description": "Logical service dependency, not an individual Azure resource inventory or live health assertion.",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/infra",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/architecture/runtime-and-recovery-boundaries.md",
+        "title": "Runtime and recovery boundaries"
+      }
+    ]
+  },
+  "spec": {
+    "type": "identity-provider",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce"
+  }
+}

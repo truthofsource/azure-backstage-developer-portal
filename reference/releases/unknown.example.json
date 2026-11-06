@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "componentRef": "component:default/workforce-api",
+  "environment": "production",
+  "state": "unknown",
+  "observedAt": null,
+  "sourceSha": null,
+  "artifactSha256": null,
+  "imageDigest": null,
+  "runUrl": null
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=Backstage PostgreSQL logical backup to scoped Azure Blob
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecCondition=/usr/bin/systemctl is-active --quiet backstage-stack.service
+Environment=BACKSTAGE_BACKUP_CONTAINER_URL=https://stesihubbsbackup001.blob.core.windows.net/database-backups
+ExecStart=/bin/bash /opt/backstage/vm/backup-session.sh
+TimeoutStartSec=1800

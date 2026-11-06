@@ -1,0 +1,30 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Location",
+  "metadata": {
+    "name": "workforce-engineering-catalog",
+    "title": "Workforce engineering catalog",
+    "description": "Public reference catalog; names and links use example targets."
+  },
+  "spec": {
+    "type": "file",
+    "targets": [
+      "./catalog/workforce-engineering.yaml",
+      "./catalog/workforce.yaml",
+      "./catalog/workforce-web.yaml",
+      "./catalog/workforce-api.yaml",
+      "./catalog/workforce-directory-worker.yaml",
+      "./catalog/workforce-document-scanner.yaml",
+      "./catalog/workforce-provider-importer.yaml",
+      "./catalog/workforce-screening-worker.yaml",
+      "./catalog/workforce-fowler-workers.yaml",
+      "./catalog/workforce-relias-worker.yaml",
+      "./catalog/workforce-infrastructure.yaml",
+      "./catalog/workforce-sql.yaml",
+      "./catalog/workforce-private-storage.yaml",
+      "./catalog/workforce-key-vault.yaml",
+      "./catalog/workforce-entra.yaml",
+      "./catalog/workforce-hub-observability.yaml"
+    ]
+  }
+}

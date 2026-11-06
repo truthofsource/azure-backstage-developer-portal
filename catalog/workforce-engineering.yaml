@@ -1,0 +1,13 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Group",
+  "metadata": {
+    "name": "workforce-engineering",
+    "title": "Workforce engineering",
+    "description": "Proposed technical ownership group; not an Entra group or a permission grant."
+  },
+  "spec": {
+    "type": "team",
+    "children": []
+  }
+}

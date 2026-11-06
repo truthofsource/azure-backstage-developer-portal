@@ -1,0 +1,46 @@
+# Azure-hosted engineering service. This file contains no credentials or
+# personal roster. Missing environment variables must fail startup.
+app:
+  baseUrl: ${BACKSTAGE_BASE_URL}
+backend:
+  baseUrl: ${BACKSTAGE_BASE_URL}
+  listen:
+    host: 0.0.0.0
+    port: 7007
+  cors:
+    origin: ${BACKSTAGE_BASE_URL}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${BACKSTAGE_POSTGRES_HOST}
+      port: 5432
+      user: ${BACKSTAGE_POSTGRES_USER}
+      password: ${BACKSTAGE_POSTGRES_PASSWORD}
+      database: backstage
+auth:
+  environment: production
+  providers:
+    microsoft:
+      production:
+        clientId: ${BACKSTAGE_ENTRA_CLIENT_ID}
+        clientSecret: ${BACKSTAGE_ENTRA_CLIENT_SECRET}
+        tenantId: ${BACKSTAGE_ENTRA_TENANT_ID}
+        signIn:
+          resolvers:
+            - resolver: userIdMatchingUserEntityAnnotation
+catalog:
+  locations:
+    - type: url
+      target: ${BACKSTAGE_CATALOG_URL}
+integrations:
+  github:
+    - host: github.com
+      apps:
+        - appId: ${BACKSTAGE_GITHUB_APP_ID}
+          allowedInstallationOwners: [truthofsource]
+          clientId: ${BACKSTAGE_GITHUB_APP_CLIENT_ID}
+          clientSecret: ${BACKSTAGE_GITHUB_APP_CLIENT_SECRET}
+          privateKey: ${BACKSTAGE_GITHUB_APP_PRIVATE_KEY}
+          webhookSecret: ${BACKSTAGE_GITHUB_APP_WEBHOOK_SECRET}

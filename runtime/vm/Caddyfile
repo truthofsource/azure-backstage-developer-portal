@@ -1,0 +1,37 @@
+{
+    auto_https disable_redirects
+}
+
+{$BACKSTAGE_DOMAIN} {
+    # The VM NSG publishes 443 only. Use the TLS-ALPN challenge on that port.
+    tls {
+        issuer acme {
+            disable_http_challenge
+        }
+    }
+    encode zstd gzip
+
+    handle /oauth2/* {
+        reverse_proxy oauth2-proxy:4180 {
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-Uri {uri}
+        }
+    }
+
+    handle {
+        forward_auth oauth2-proxy:4180 {
+            uri /oauth2/auth
+            header_up X-Real-IP {remote_host}
+            @unauthorized status 401
+            handle_response @unauthorized {
+                redir * /oauth2/sign_in?rd={scheme}://{host}{uri}
+            }
+        }
+        reverse_proxy backstage:7007 {
+            header_up -X-Auth-Request-User
+            header_up -X-Auth-Request-Email
+            header_up -X-Forwarded-User
+            header_up -X-Forwarded-Email
+        }
+    }
+}

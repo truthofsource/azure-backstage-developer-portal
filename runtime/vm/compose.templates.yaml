@@ -1,0 +1,13 @@
+# Loaded only when the reviewed template writer is enabled.
+services:
+  backstage:
+    environment:
+      BACKSTAGE_TEMPLATE_APP_ID: ${BACKSTAGE_TEMPLATE_APP_ID:?set separate writer App ID}
+      BACKSTAGE_TEMPLATE_INSTALLATION_ID: ${BACKSTAGE_TEMPLATE_INSTALLATION_ID:?set selected installation}
+      BACKSTAGE_TEMPLATE_REPOSITORY_ID: ${BACKSTAGE_TEMPLATE_REPOSITORY_ID:?set Workforce repository ID}
+      BACKSTAGE_TEMPLATE_MAINTAINERS: ${BACKSTAGE_TEMPLATE_MAINTAINERS:?set exact maintainer refs}
+    secrets:
+      - template_github_private_key
+secrets:
+  template_github_private_key:
+    file: ${BACKSTAGE_SECRET_DIR:?set protected secret directory}/template_github_private_key

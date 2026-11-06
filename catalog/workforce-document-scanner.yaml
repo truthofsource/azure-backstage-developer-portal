@@ -1,0 +1,29 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-document-scanner",
+    "title": "Workforce document scan processor",
+    "description": "Workforce document scan processor",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/apps/stage2-scan-processor",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/stage2-malware-scan-processor-operations.md",
+        "title": "Scan processor operations"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "resource:default/workforce-private-storage",
+      "resource:default/workforce-sql"
+    ]
+  }
+}

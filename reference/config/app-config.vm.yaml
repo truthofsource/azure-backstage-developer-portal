@@ -1,0 +1,21 @@
+# Single-VM pilot only. PostgreSQL stays on an isolated Docker network and
+# TechDocs uses a persistent host-mounted directory. Never publish port 5432.
+workforce:
+  templates:
+    enabled: ${BACKSTAGE_TEMPLATES_ENABLED}
+backend:
+  database:
+    connection:
+      ssl: false
+catalog:
+  locations:
+    - type: url
+      target: ${BACKSTAGE_CATALOG_URL}
+    - type: file
+      target: /app/engineers.yaml
+techdocs:
+  builder: external
+  publisher:
+    type: local
+    local:
+      publishDirectory: /var/lib/backstage/techdocs

@@ -1,0 +1,29 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-web",
+    "title": "Workforce portal and Apply",
+    "description": "Workforce portal and Apply",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/apps/web",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/staff-session-and-refresh.md",
+        "title": "Session operations"
+      }
+    ]
+  },
+  "spec": {
+    "type": "website",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "resource:default/workforce-entra",
+      "component:default/workforce-api"
+    ]
+  }
+}

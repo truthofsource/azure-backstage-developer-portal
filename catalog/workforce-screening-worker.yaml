@@ -1,0 +1,28 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-screening-worker",
+    "title": "SAM and TTPL container workers",
+    "description": "SAM and TTPL container workers",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/scripts/screening",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/monthly-oig-sam-screening.md",
+        "title": "Monthly screening operations"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "production",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "component:default/workforce-api"
+    ]
+  }
+}

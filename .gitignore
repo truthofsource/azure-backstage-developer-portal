@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.terraform/
+*.tfstate*
+*.tfplan
+*.tfvars
+*.auto.tfvars.json
+.env
+vm.env
+secrets/
+engineers.yaml
+*.pem
+*.key
+node_modules/
+dist/
+site/

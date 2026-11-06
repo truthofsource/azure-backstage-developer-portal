@@ -1,0 +1,28 @@
+{
+  "apiVersion": "backstage.io/v1alpha1",
+  "kind": "Component",
+  "metadata": {
+    "name": "workforce-relias-worker",
+    "title": "Relias preparation worker",
+    "description": "Relias preparation worker",
+    "annotations": {
+      "backstage.io/source-location": "url:https://github.com/truthofsource/workforce-platform/tree/main/scripts/relias",
+      "github.com/project-slug": "truthofsource/workforce-platform"
+    },
+    "links": [
+      {
+        "url": "https://github.com/truthofsource/workforce-platform/blob/main/docs/runbooks/relias-connection.md",
+        "title": "Relias connection"
+      }
+    ]
+  },
+  "spec": {
+    "type": "service",
+    "lifecycle": "experimental",
+    "owner": "group:default/workforce-engineering",
+    "system": "system:default/workforce",
+    "dependsOn": [
+      "component:default/workforce-api"
+    ]
+  }
+}
