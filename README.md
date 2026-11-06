@@ -51,15 +51,15 @@ The source also describes disabled managed-service alternatives. They are not th
 | Component | Purpose | Actual source |
 | --- | --- | --- |
 | Software catalog | Model services, resources, owners and dependencies | [Entities](catalog/) |
-| Backend startup boundary | Require an explicit local or hosted mode and required hosted inputs | [Startup](reference/backend/index.ts) |
-| Engineering permissions | Default read-oriented access; deny changes without an explicit permission rule; separately scoped template actions | [Policy](reference/backend/permissionPolicy.ts) |
+| Backend startup boundary | Confirm whether the portal will run locally or in Azure, and require the matching settings | [Startup](reference/backend/index.ts) |
+| Engineering permissions | Allow approved engineers to read; require explicit permission for changes and template actions | [Policy](reference/backend/permissionPolicy.ts) |
 | Entra sign-in | Separate ingress and backend applications; map backend identity to catalog user annotation | [Configuration](reference/config/app-config.production.yaml) |
 | Four-service VM runtime | Edge, identity proxy, portal and private PostgreSQL network | [Compose](runtime/vm/compose.yaml) |
 | Safe startup checks | Reject mutable images, shared identity apps and exposed/missing secret files | [Preflight](runtime/vm/preflight.py) |
-| Release evaluator | Compare same-run receipt, artifact/source identity and fresh check of the currently saved result | [Evaluator](reference/releases/evaluate.py) |
-| Recoverable portal state | Database dump, inventory, checksum and restore into a separate test environment helpers | [Backup](runtime/vm/backup-postgres.sh) · [Restore](runtime/vm/check-restore.sh) |
+| Release evaluator | Check that the release report, source version, saved file and current hosted version agree | [Evaluator](reference/releases/evaluate.py) |
+| Recoverable portal state | Tools to save a database backup, check its contents and practise restoring it separately | [Backup](runtime/vm/backup-postgres.sh) · [Restore](runtime/vm/check-restore.sh) |
 | Published handbook backup | Archive one saved publication tied to one exact version and verify downloaded file hashes | [TechDocs backup](runtime/vm/backup-techdocs.sh) |
-| VM infrastructure | Key-only host, HTTPS NSG, shutdown schedule, scoped registry reader and optional backup destination | [Terraform](infra/) |
+| VM infrastructure | Server access by key, HTTPS network rules, scheduled shutdown, limited image downloads and an optional backup location | [Terraform](infra/) |
 
 ## Proof It Works
 
