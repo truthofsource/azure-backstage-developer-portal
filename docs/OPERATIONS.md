@@ -1,8 +1,10 @@
 # Operations and troubleshooting
 
+**Terms used here:** A digest is a file or container fingerprint used to confirm the exact version.
+
 ## Intentional engineering session
 
-Start the reviewed VM deliberately, validate protected inputs, pull immutable image references, start the stack and verify the engineer's actual catalog/handbook access. At closeout, run the backup procedure, stop the stack and verify VM deallocation. Do not confuse an OS shutdown with Azure deallocation. The daily shutdown schedule does not start the VM, make the service highly available or eliminate disk/IP/registry/storage charges.
+Start the reviewed VM deliberately, validate protected inputs, pull image references tied to exact builds, start the stack and verify the engineer's actual catalog/handbook access. At closeout, run the backup procedure, stop the stack and verify VM deallocation. Do not confuse an OS shutdown with Azure deallocation. The daily shutdown schedule does not start the VM, make the service highly available or eliminate disk/IP/registry/storage charges.
 
 ## Troubleshooting
 
@@ -13,7 +15,7 @@ Start the reviewed VM deliberately, validate protected inputs, pull immutable im
 | Signed in but denied | Entra assignment/group, exact catalog User annotation and approved engineer ref | Catalog ownership is not permission |
 | Empty catalog | Registered Location targets, reader installation scope and backend ingestion errors | A Git link alone does not register an entity |
 | Handbook not found | Published entity path, safe symlink/publication layout, current file hashes | Source merge is not hosted publication |
-| Release Unknown | Authenticated run, same-run receipt and current readback | Do not guess from the latest successful build |
+| Release Unknown | Authenticated run, same-run receipt and check of the currently saved result | Do not guess from the latest successful build |
 | Release Conflict | Source/digest/target/run binding | Preserve evidence; do not replace it with a green label |
 | Backend native-module error | Build/runtime Node and Linux ABI; selected lockfile | A host-built Windows module is not a Linux runtime module |
 | Backup timer silent | Active stack, timer state and last success | It never starts a stopped VM |

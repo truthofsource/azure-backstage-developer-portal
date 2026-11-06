@@ -1,5 +1,7 @@
 # Identity, admission and permission
 
+**Terms used here:** A managed identity lets an Azure service request access without storing a password in the application.
+
 An engineer encounters two complementary sign-in boundaries:
 
 1. Caddy delegates ingress authentication to OAuth2 Proxy. Its Entra application checks the configured engineering group and establishes a Secure, SameSite=Lax host cookie. The source config sets one-hour refresh and eight-hour expiry; these are settings, not proof of a particular observed session lifetime.
@@ -7,13 +9,13 @@ An engineer encounters two complementary sign-in boundaries:
 
 The hosted backend refuses missing required inputs or a mismatched runtime profile. Guest sign-in is available only in the explicit local evaluation branch. The public reference does not initialize either provider.
 
-The read-oriented policy allows approved reads and denies catalog writes/unclassified actions. Optional software-template execution requires the explicit switch, a listed maintainer, allowed action IDs and own-task conditions. The source supports rendering a technical component and publishing a component proposal; it is not blanket GitHub or Azure deployment authority. Writer credentials are separate from the ordinary reader App and absent from default Compose mounts.
+The read-oriented policy allows approved reads and denies catalog writes/actions without an explicit permission rule. Optional software-template execution requires the explicit switch, a listed maintainer, allowed action IDs and own-task conditions. The source supports rendering a technical component and publishing a component proposal; it is not blanket GitHub or Azure deployment authority. Writer credentials are separate from the ordinary reader App and absent from default Compose mounts.
 
 | Identity | Purpose | Credential boundary |
 | --- | --- | --- |
 | Engineer | Interactive access to portal | Entra and protected session state |
 | Ingress app | Admission/group gate | Dedicated mounted client/cookie secrets |
-| Backstage app | Backend identity resolution | Separate mounted client secret |
+| Backstage app | Backend matching the signed-in person to a known account | Separate mounted client secret |
 | Reader GitHub App | Catalog/source access | Restricted App key and installation scope |
 | Optional writer App | Reviewed component proposals | Separate restricted key and maintainer rules |
 | Azure VM managed identity | Registry reads and backup access | Azure-issued token, no storage account key |

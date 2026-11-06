@@ -1,6 +1,6 @@
 # Selected Backstage VM infrastructure
 
-Actual selected source covers hub network reservations, an optional key-only Ubuntu 24.04 VM with system-assigned identity, HTTPS-only NSG entry, daily shutdown, repository-conditioned registry reader and optional identity-authorized Blob backup destination. The bootstrap installs guest tools; it does not start or configure a working portal by itself.
+Actual selected source covers hub network reservations, an optional key-only Ubuntu 24.04 VM with system-assigned identity, HTTPS-only NSG entry, daily shutdown, registry reader limited to the selected image repository and optional identity-authorized Blob backup destination. The bootstrap installs guest tools; it does not start or configure a working portal by itself.
 
 This public root is a curated reference. It changes naming, the bootstrap relative path and default network activation, and narrows the services group to the selected VM profile. It omits the real remote backend, commissioned input file and managed-service/vault alternatives. Never apply these default-Off inputs to the existing live state: they could propose removal of resources managed there.
 

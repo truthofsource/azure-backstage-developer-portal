@@ -1,6 +1,6 @@
 # Backstage Developer Portal on Azure
 
-**Give engineers one place to find the service, its owner, its handbook and evidence of what is deployed.**
+**Give engineers one place to find the system, its owner and the instructions for running it.**
 
 [Business problem](#the-business-problem) · [Solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
 
@@ -8,19 +8,17 @@
 
 ## The Business Problem
 
-A healthcare-services platform grew across a React frontend, serverless API, container workers, databases, private documents and identity services. An engineer needed to discover ownership, dependencies, runbooks and releases without searching disconnected repositories, cloud pages and notes.
-
-The portal also needed its own access and recovery controls. A dashboard that reports a successful build as a deployed release, stores powerful writer credentials by default or cannot restore its plugin database creates a new operational risk.
+As the platform grew, information about applications, background jobs, storage and recovery was spread across different places. Engineers needed a clear way to find who owned each part, how it worked and which version was running. The engineering portal also needed protected access and reliable backups.
 
 ## The Solution
 
-Implement Backstage as a separate engineering portal with a software catalog, TechDocs handbook and carefully bounded release evidence. Host the selected profile on an intentionally operated Azure Linux VM using Docker Compose, Caddy, OAuth2 Proxy, Backstage and PostgreSQL. Separate engineering identity from employee business access, and back up persistent state off the host using managed identity.
+Use Backstage to bring the service list, engineering handbook and release information together. Run the portal separately from the employee application, restrict engineer access with Microsoft sign-in, and save its database and handbook outside the server.
 
-**Business outcome:** Engineers can connect a component to its owner, dependencies and operating guidance, distinguish current release proof from incomplete evidence, and recover portal data and documentation without treating the portal as the business application's control plane.
+**Business outcome:** Engineers can find the right owner and instructions, check release information, and recover the portal without confusing it with the employee application.
 
 ### Actual implementation and public reference
 
-This project contains actual catalog entities, backend startup/permission source, Entra configuration, four-service Compose boundary, runtime preflight, PostgreSQL/handbook backup and recovery helpers, release-evidence evaluator and selected Terraform from the implemented platform. Identifying names, domains and target IDs use consistent examples. [Source mapping](docs/SOURCE-MAP.md).
+This project includes the platform’s service list, startup and permission checks, Microsoft sign-in settings, container settings, backup tools, release checks and related Terraform. Identifying names, domains and target IDs use consistent examples. [Source mapping](docs/SOURCE-MAP.md).
 
 The local preview is a small new reference viewer, **not the Backstage application**. It reads the actual catalog structure and runs the actual Python release evaluator on fictional evidence. It requires no cloud credentials, login or provider call. Full private application dependencies, engineer rosters and secrets are deliberately outside this public example.
 
@@ -54,13 +52,13 @@ The source also describes disabled managed-service alternatives. They are not th
 | --- | --- | --- |
 | Software catalog | Model services, resources, owners and dependencies | [Entities](catalog/) |
 | Backend startup boundary | Require an explicit local or hosted mode and required hosted inputs | [Startup](reference/backend/index.ts) |
-| Engineering permissions | Default read-oriented access; deny unclassified writes; separately scoped template actions | [Policy](reference/backend/permissionPolicy.ts) |
+| Engineering permissions | Default read-oriented access; deny changes without an explicit permission rule; separately scoped template actions | [Policy](reference/backend/permissionPolicy.ts) |
 | Entra sign-in | Separate ingress and backend applications; map backend identity to catalog user annotation | [Configuration](reference/config/app-config.production.yaml) |
 | Four-service VM runtime | Edge, identity proxy, portal and private PostgreSQL network | [Compose](runtime/vm/compose.yaml) |
 | Safe startup checks | Reject mutable images, shared identity apps and exposed/missing secret files | [Preflight](runtime/vm/preflight.py) |
-| Release evaluator | Compare same-run receipt, artifact/source identity and fresh current readback | [Evaluator](reference/releases/evaluate.py) |
-| Recoverable portal state | Database dump, inventory, checksum and isolated restore helpers | [Backup](runtime/vm/backup-postgres.sh) · [Restore](runtime/vm/check-restore.sh) |
-| Published handbook backup | Archive one immutable publication and verify downloaded file hashes | [TechDocs backup](runtime/vm/backup-techdocs.sh) |
+| Release evaluator | Compare same-run receipt, artifact/source identity and fresh check of the currently saved result | [Evaluator](reference/releases/evaluate.py) |
+| Recoverable portal state | Database dump, inventory, checksum and restore into a separate test environment helpers | [Backup](runtime/vm/backup-postgres.sh) · [Restore](runtime/vm/check-restore.sh) |
+| Published handbook backup | Archive one saved publication tied to one exact version and verify downloaded file hashes | [TechDocs backup](runtime/vm/backup-techdocs.sh) |
 | VM infrastructure | Key-only host, HTTPS NSG, shutdown schedule, scoped registry reader and optional backup destination | [Terraform](infra/) |
 
 ## Proof It Works
@@ -83,7 +81,7 @@ python -B -m unittest discover -s runtime/vm -v
 python -B runtime/vm/check-compose.py
 ```
 
-Run secret/roster file-permission tests on Linux; they explicitly skip on Windows. Compose validation renders configuration and does not start containers or pull the example image digests. The ten original preflight tests and the Compose assertions cover mutable images, separate Entra apps, protected files, internal PostgreSQL, edge-only 443 and a separately mounted optional writer key.
+Run the protected-file tests on Linux; they are skipped on Windows because its file-permission rules differ. The Compose checks read the settings without starting containers or downloading images. The ten original startup tests and the Compose checks cover exact image versions, separate sign-in apps, protected files, the private database connection and the optional separate publishing key.
 
 ### 3. Validate the public catalog and selected infrastructure
 
@@ -117,7 +115,7 @@ The Dockerfile here is an actual build recipe excerpt. It expects full-workspace
 
 ## Security and Operational Boundaries
 
-- Entra ingress admission, backend identity resolution, permission checks and Azure workload identity are different controls.
+- Entra ingress admission, backend matching the signed-in person to a known account, permission checks and Azure workload identity are different controls.
 - A catalog ownership group is metadata, not an Entra membership or access grant.
 - Compose secrets mount protected host files; this does not itself make them Key Vault-backed.
 - The optional template writer uses a separate identity/key and approved actions; it is Off in the default profile. Catalog reads do not require a general repository writer.
@@ -126,7 +124,7 @@ The Dockerfile here is an actual build recipe excerpt. It expects full-workspace
 
 ## Scaling, Costs and Tradeoffs
 
-The single VM lowers the operating footprint for intentional engineering sessions but is a single failure domain, with brief backend pauses for consistent backups. Deallocation stops compute billing, not disk, static IP, registry or backup storage charges. A shutdown schedule is a safety net, not a spending cap.
+The single VM lowers the operating footprint for intentional engineering sessions but is a single group of components that can fail together, with brief backend pauses for consistent backups. Deallocation stops compute billing, not disk, static IP, registry or backup storage charges. A shutdown schedule is a safety net, not a spending cap.
 
 Scale from measured catalog/search latency, documentation access, database growth and concurrent engineers. Managed PostgreSQL, external private TechDocs storage, multiple backend instances and shared sessions require coordinated networking, identity and recovery work; they are not live features of this reference. [Scaling and tradeoffs](docs/SCALING.md).
 
@@ -138,7 +136,7 @@ Scale from measured catalog/search latency, documentation access, database growt
 | [Identity and permissions](docs/IDENTITY.md) | Two Entra layers, engineer policy and separate writer |
 | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) | Ownership, publication and read-only serving |
 | [Release evidence](docs/RELEASE-EVIDENCE.md) | Verified, Unknown, Conflict and Stale |
-| [Deployment](docs/DEPLOYMENT.md) | Build, digest, host preflight and rollback |
+| [Deployment](docs/DEPLOYMENT.md) | Build, digest, host readiness check and rollback |
 | [Backup and recovery](docs/RECOVERY.md) | Database, handbook and separately protected secrets |
 | [Operations](docs/OPERATIONS.md) | Session lifecycle, troubleshooting and ClickOps |
 | [Commands](docs/COMMANDS.md) | Local checks and controlled-host command examples |

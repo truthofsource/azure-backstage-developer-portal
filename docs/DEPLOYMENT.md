@@ -1,6 +1,8 @@
 # Build, release and rollback
 
-The implemented Backstage workspace uses its own lockfile and Node/Yarn dependency graph; it is separate from the business frontend. The selected source declares Backstage 1.55.0. Its Dockerfile uses the same digest-pinned Node 24 base in dependency and runtime stages, builds native modules in the dependency stage, copies the prepared backend bundle and starts Node as the nonroot node user. Package managers and native build tooling stay out of the final runtime stage where practical.
+**Terms used here:** A digest is a file or container fingerprint used to confirm the exact version. A managed identity lets an Azure service request access without storing a password in the application.
+
+The implemented Backstage workspace uses its own lockfile and Node/Yarn dependency graph; it is separate from the business frontend. The selected source declares Backstage 1.55.0. Its Dockerfile uses the same digest-pinned Node 24 base in dependency and runtime stages, builds packages built for a particular operating system in the dependency stage, copies the prepared backend bundle and starts Node as the nonroot node user. Package managers and native build tooling stay out of the final runtime stage where practical.
 
 The public Dockerfile expects full workspace files: Yarn metadata, the lockfile, app configuration and backend skeleton/bundle archives. This repository is a curated reference, not a complete independently buildable Backstage monorepo. Running docker build on this subset will not create that application. Do not replace missing inputs with unrelated latest packages and call the result the same image.
 

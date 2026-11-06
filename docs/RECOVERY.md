@@ -1,8 +1,10 @@
 # Back up and recover the portal
 
-Backstage plugin state lives in PostgreSQL, not the workforce application's Azure SQL database. Recovery needs a consistent database snapshot, published TechDocs, protected runtime credentials, the private engineer roster, TLS state and reviewed image/configuration identities. They have different confidentiality and recovery paths.
+**Terms used here:** A managed identity lets an Azure service request access without storing a password in the application.
 
-The actual `backup-session.sh` takes a nonblocking flock, checks that the session and backend are already running, stops only the backend, runs the database backup and conditionally resumes the backend in an EXIT trap if the session remains active. It never starts a stopped session.
+Backstage saves its own information in PostgreSQL, separately from the employee application’s Azure SQL database. Recovery needs a database backup, the published handbook, protected credentials, the approved-engineer list, HTTPS certificate data and the correct application version and settings. Keep these items protected and recover each through its approved process.
+
+The actual `backup-session.sh` allows only one backup at a time. It checks that the portal is running, pauses its server, takes the database backup, then restarts the server only if the operating session is still active. It never starts a session that was already stopped.
 
 `backup-postgres.sh` records a database/table/row inventory, runs pg_dumpall with --no-role-passwords, compresses and checks the dump, records SHA-256 and uploads the dump/checksum/inventory with AzCopy managed identity and overwrite=false. Backups may still contain sensitive plugin/auth data even without role-password hashes. Azure storage encryption and strict access matter; these scripts are not the separate envelope-encryption wrapper.
 
