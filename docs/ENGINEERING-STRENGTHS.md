@@ -1,6 +1,6 @@
 # Engineering Strengths and Practical Value
 
-The value of this Backstage implementation comes from joining useful engineering information with controlled access and recoverable operations. The public project includes actual implementation source, a fictional local viewer and clearly bounded tests. Those evidence types support different claims.
+The value of this Backstage implementation comes from joining useful engineering information with controlled access and recoverable operations. The public project includes actual implementation source, a fictional local viewer and tests with a defined scope. Each demonstrates a different part of the implementation.
 
 ## 1. Ownership is part of service discovery
 
@@ -18,9 +18,9 @@ The handbook backup identifies one publication, retrieves the archive again and 
 
 **Evidence:** [production configuration](../reference/config/app-config.production.yaml), [TechDocs backup](../runtime/vm/backup-techdocs.sh).
 
-## 3. Admission, identity and permissions are separate controls
+## 3. Sign-in, account matching and permissions have different jobs
 
-The HTTPS edge delegates admission to OAuth2 Proxy and an engineering-group gate. Backstage uses a different Entra application to map the signed-in user to a known catalog identity. The hosted permission policy then checks approved engineer references and permitted operations.
+At the front of the portal, OAuth2 Proxy checks Microsoft sign-in and membership in the approved engineering group. Backstage uses a different Entra application to map the signed-in user to a known catalog identity. The hosted permission policy then checks approved engineer references and permitted operations.
 
 Approved reads do not become general catalog-write or deployment permission. Software-template actions require an explicit switch, listed maintainer, approved action IDs and own-task conditions. A separate writer identity/key is absent from default mounts. This limits what an ordinary portal session can do, while keeping a reviewed extension path available.
 
@@ -30,7 +30,7 @@ More identity layers also mean more configuration and sessions to operate. These
 
 ## 4. Release information says what the evidence actually proves
 
-The evaluator compares a selected source and artifact, the publication receipt from that run and a fresh observation of what is currently deployed. This makes the portal useful during release and rollback work: engineers can distinguish “the build passed” from “this artifact is running.”
+The evaluator compares the selected code and release files, the deployment record from that run and a fresh observation of what is currently running. This makes the portal useful during release and rollback work: engineers can distinguish “the build passed” from “this artifact is running.”
 
 Its four states preserve uncertainty. Verified requires agreement; Unknown means evidence is insufficient; Conflict identifies disagreement; Stale means the observation is too old. Nine original evaluator tests and the local demonstration exercise these decisions. The evaluator itself does not authenticate or fetch evidence; its trusted reader must do that separately.
 
@@ -56,9 +56,9 @@ These are specific controls, not a complete security certification. A pinned ima
 
 ## 7. Cost controls fit the usage pattern
 
-A single VM and Compose stack provide an understandable footprint for intentional engineering sessions. The backup timer runs only during an active stack and does not wake the VM. The operating procedure ends with backup, stop and deallocation.
+One VM runs the portal and its supporting containers during planned engineering sessions. The backup timer runs only during an active stack and does not wake the VM. The operating procedure ends with backup, stop and deallocation.
 
-Deallocation stops compute billing while disks, static IP, registry and backup storage can still cost money. The VM remains one failure domain. Sustained use may justify managed PostgreSQL, external TechDocs storage and multiple backends after measuring demand and rehearsing the resulting access/recovery paths.
+Deallocation stops compute billing while disks, static IP, registry and backup storage can still cost money. A VM failure can still interrupt the whole portal. Sustained use may justify managed PostgreSQL, external TechDocs storage and multiple backends after measuring demand and rehearsing the resulting access/recovery paths.
 
 **Evidence:** [operations](OPERATIONS.md), [backup timer](../runtime/vm/backstage-backup.timer.example), [Terraform](../infra/README.md), [growth and tradeoffs](SCALING.md).
 

@@ -33,3 +33,14 @@ Reviewed identity policy, catalog/TechDocs publication, release evaluation, runt
 The nine original release-evaluator tests and five public catalog checks were rerun: all 14 passed. The refreshed local viewer passed four-section navigation, 16 catalog entities, four release states, six strengths cards and a 390-pixel mobile layout, with zero page errors or external requests. Five reference screenshots were refreshed. The earlier Linux startup and Terraform results above remain dated evidence; they were not repeated for these presentation-only changes.
 
 No Backstage stack, Azure VM, sign-in, backup/restore, cloud operation or hosted GitHub check was started. Repository-relative links and public labels were checked before publication.
+
+## Wording and preview review - November 6, 2026
+
+The supporting guides and preview labels received another plain-language review.
+Screenshots were refreshed from the local fictional viewer. Desktop tabs loaded
+without browser errors, and the 390-pixel mobile view had no horizontal page
+overflow. External browser requests were blocked. HTML structure and embedded
+scripts remained unchanged; this pass changed text and screenshots only.
+
+These browser checks did not repeat cloud acceptance or the earlier code tests.
+No Azure service, Gmail account, provider session or hosted Actions run was used.
