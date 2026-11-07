@@ -23,11 +23,11 @@ The portal connects discovery, controlled access and day-to-day operations. Each
 | Strength | Why it matters | Evidence in this project |
 | --- | --- | --- |
 | **A service catalog with ownership and dependencies** | Engineers can find who maintains a component and what it relies on before changing it or investigating a failure. | [Catalog entities](catalog/) and [catalog checks](tests/test_catalog.py) |
-| **Operating guidance beside the service** | TechDocs gives engineers a consistent place to find the handbook instead of searching disconnected files. Publications mount read-only in the serving portal. | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) |
-| **Engineer access with explicit permissions** | The ingress group gate, backend user mapping and read-oriented policy make separate access decisions. Optional template writing uses a separate identity and stays Off by default. | [Identity design](docs/IDENTITY.md) and [permission policy](reference/backend/permissionPolicy.ts) |
+| **Operating guidance beside the service** | TechDocs gives engineers a consistent place to find the handbook instead of searching disconnected files. The portal can read the published handbook but cannot change those files. | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) |
+| **Engineer access with explicit permissions** | Microsoft sign-in checks the engineer group, the backend matches the account, and application permissions control which actions are allowed. Optional template writing uses a separate identity and stays Off by default. | [Identity design](docs/IDENTITY.md) and [permission policy](reference/backend/permissionPolicy.ts) |
 | **Release status that refuses false certainty** | Missing, conflicting or old observations stay Unknown, Conflict or Stale. A green build is not presented as proof that a release is running. | [Actual evaluator](reference/releases/evaluate.py) and nine original tests |
 | **Recovery designed into operations** | Database inventories, checksums, off-host copies and an isolated restore helper make recovery inspectable. Handbook archives are downloaded again and verified. | [Recovery process](docs/RECOVERY.md) and [restore helper](runtime/vm/check-restore.sh) |
-| **Repeatable and cautious startup** | Exact image digests, protected host inputs and preflight checks catch known configuration mistakes before the stack starts. Only the HTTPS edge publishes a port. | [Preflight](runtime/vm/preflight.py) and [Compose checks](runtime/vm/check-compose.py) |
+| **Repeatable and cautious startup** | Fixed container versions, protected configuration files and startup checks catch known mistakes before the portal starts. Only the HTTPS edge publishes a port. | [Preflight](runtime/vm/preflight.py) and [Compose checks](runtime/vm/check-compose.py) |
 | **An intentional operating footprint** | The on-demand VM model fits occasional engineering sessions. Backup timers do not wake a stopped VM; shutdown and deallocation are explicit operating steps. | [Operations](docs/OPERATIONS.md) and [scaling/costs](docs/SCALING.md) |
 
 ![Engineering strengths in the local reference viewer](docs/images/05-strengths.png)
@@ -53,9 +53,9 @@ flowchart LR
   Backend --> Catalog[Catalog and ownership]
   Backend --> Docs[Read-only published TechDocs]
   Backend --> PG[(PostgreSQL / internal Docker network)]
-  Evidence[Authenticated publication evidence] --> Reader[Bounded release reader]
+  Evidence[Verified release records] --> Reader[Limited release reader]
   Reader --> Backend
-  Backup[Quiesced backup + inventory] -->|VM managed identity| Blob[Restricted Blob backup container]
+  Backup[Pause writes and create verified backup] -->|VM managed identity| Blob[Restricted Blob backup container]
   PG --> Backup
   Docs --> Backup
 ```
@@ -133,7 +133,7 @@ The Dockerfile here is an actual build recipe excerpt. It expects full-workspace
 
 ## Security and Operational Boundaries
 
-- Entra ingress admission, backend matching the signed-in person to a known account, permission checks and Azure workload identity are different controls.
+- Microsoft sign-in, account matching, application permissions and Azure service identities protect different parts of the system.
 - A catalog ownership group is metadata, not an Entra membership or access grant.
 - Compose secrets mount protected host files; this does not itself make them Key Vault-backed.
 - The optional template writer uses a separate identity/key and approved actions; it is Off in the default profile. Catalog reads do not require a general repository writer.
@@ -142,7 +142,7 @@ The Dockerfile here is an actual build recipe excerpt. It expects full-workspace
 
 ## Scaling, Costs and Tradeoffs
 
-The single VM lowers the operating footprint for intentional engineering sessions but is a single group of components that can fail together, with brief backend pauses for consistent backups. Deallocation stops compute billing, not disk, static IP, registry or backup storage charges. A shutdown schedule is a safety net, not a spending cap.
+One VM keeps occasional engineering sessions simple to operate, but a VM failure can interrupt the whole portal. Consistent backups also require brief backend pauses. Deallocation stops compute billing, not disk, static IP, registry or backup storage charges. A shutdown schedule is a safety net, not a spending cap.
 
 Scale from measured catalog/search latency, documentation access, database growth and concurrent engineers. Managed PostgreSQL, external private TechDocs storage, multiple backend instances and shared sessions require coordinated networking, identity and recovery work; they are not live features of this reference. [Scaling and tradeoffs](docs/SCALING.md).
 
