@@ -1,5 +1,7 @@
 # Strengths, weaknesses and scaling tradeoffs
 
+The design prioritizes useful engineering discovery, explicit access and recoverable operations at a modest operating footprint. [The strengths guide](ENGINEERING-STRENGTHS.md) connects each advantage to its implementation evidence. The table below explains the cost of those choices rather than treating them as universal defaults.
+
 | Choice | Strength | Weakness / tradeoff |
 | --- | --- | --- |
 | Backstage catalog + TechDocs | One discovery path across services, owners and operating guidance | Metadata and documentation publication require ownership and maintenance |

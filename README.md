@@ -1,8 +1,8 @@
 # Backstage Developer Portal on Azure
 
-**Give engineers one place to find the system, its owner and the instructions for running it.**
+**Connect service ownership, engineering guidance, trustworthy release information and recovery in one protected portal.**
 
-[Business problem](#the-business-problem) · [Solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
+[Business problem](#the-business-problem) · [Solution](#the-solution) · [Engineering strengths](#engineering-strengths) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
 
 ![Local catalog reference](docs/images/01-catalog.png)
 
@@ -14,7 +14,25 @@ As the platform grew, information about applications, background jobs, storage a
 
 Use Backstage to bring the service list, engineering handbook and release information together. Run the portal separately from the employee application, restrict engineer access with Microsoft sign-in, and save its database and handbook outside the server.
 
-**Business outcome:** Engineers can find the right owner and instructions, check release information, and recover the portal without confusing it with the employee application.
+**Business outcome:** Engineers have a clearer path from “what runs this service?” to its owner, operating instructions and release evidence. The portal has its own access and recovery controls, so it can support engineering work without becoming another route into employee records.
+
+## Engineering Strengths
+
+The portal connects discovery, controlled access and day-to-day operations. Each strength has an explicit purpose and supporting implementation.
+
+| Strength | Why it matters | Evidence in this project |
+| --- | --- | --- |
+| **A service catalog with ownership and dependencies** | Engineers can find who maintains a component and what it relies on before changing it or investigating a failure. | [Catalog entities](catalog/) and [catalog checks](tests/test_catalog.py) |
+| **Operating guidance beside the service** | TechDocs gives engineers a consistent place to find the handbook instead of searching disconnected files. Publications mount read-only in the serving portal. | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) |
+| **Engineer access with explicit permissions** | The ingress group gate, backend user mapping and read-oriented policy make separate access decisions. Optional template writing uses a separate identity and stays Off by default. | [Identity design](docs/IDENTITY.md) and [permission policy](reference/backend/permissionPolicy.ts) |
+| **Release status that refuses false certainty** | Missing, conflicting or old observations stay Unknown, Conflict or Stale. A green build is not presented as proof that a release is running. | [Actual evaluator](reference/releases/evaluate.py) and nine original tests |
+| **Recovery designed into operations** | Database inventories, checksums, off-host copies and an isolated restore helper make recovery inspectable. Handbook archives are downloaded again and verified. | [Recovery process](docs/RECOVERY.md) and [restore helper](runtime/vm/check-restore.sh) |
+| **Repeatable and cautious startup** | Exact image digests, protected host inputs and preflight checks catch known configuration mistakes before the stack starts. Only the HTTPS edge publishes a port. | [Preflight](runtime/vm/preflight.py) and [Compose checks](runtime/vm/check-compose.py) |
+| **An intentional operating footprint** | The on-demand VM model fits occasional engineering sessions. Backup timers do not wake a stopped VM; shutdown and deallocation are explicit operating steps. | [Operations](docs/OPERATIONS.md) and [scaling/costs](docs/SCALING.md) |
+
+![Engineering strengths in the local reference viewer](docs/images/05-strengths.png)
+
+[How these strengths work together](docs/ENGINEERING-STRENGTHS.md) explains the practical value, source evidence and limits of each choice. The portal is a single-VM design, not a claim of high availability or measured recovery times.
 
 ### Actual implementation and public reference
 
@@ -132,6 +150,7 @@ Scale from measured catalog/search latency, documentation access, database growt
 
 | Guide | What it explains |
 | --- | --- |
+| [Engineering strengths](docs/ENGINEERING-STRENGTHS.md) | Practical value and evidence behind the main design choices |
 | [Architecture](docs/ARCHITECTURE.md) | Portal, business application and infrastructure boundaries |
 | [Identity and permissions](docs/IDENTITY.md) | Two Entra layers, engineer policy and separate writer |
 | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) | Ownership, publication and read-only serving |

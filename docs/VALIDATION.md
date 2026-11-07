@@ -25,3 +25,11 @@ Screenshots show the new local reference viewer using actual catalog/evaluator s
 [Machine-readable result](validation-results.json) records this exact scope. Tests do not authenticate the hypothetical evidence inputs; the real reader must do that separately.
 
 A final bash syntax check caught retained Windows line endings in copied source. They were normalized to LF and protected with .gitattributes; the manual workflow now checks every copied shell helper without executing it.
+
+## Strengths-focused presentation review — November 6
+
+Reviewed identity policy, catalog/TechDocs publication, release evaluation, runtime startup, backups and growth guidance before updating the README and adding the engineering-strengths guide. The review changes presentation, not the runtime or Terraform.
+
+The nine original release-evaluator tests and five public catalog checks were rerun: all 14 passed. The refreshed local viewer passed four-section navigation, 16 catalog entities, four release states, six strengths cards and a 390-pixel mobile layout, with zero page errors or external requests. Five reference screenshots were refreshed. The earlier Linux startup and Terraform results above remain dated evidence; they were not repeated for these presentation-only changes.
+
+No Backstage stack, Azure VM, sign-in, backup/restore, cloud operation or hosted GitHub check was started. Repository-relative links and public labels were checked before publication.
