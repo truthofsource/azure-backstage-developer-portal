@@ -1,6 +1,6 @@
 # Backstage Developer Portal on Azure
 
-**Connect service ownership, engineering guidance, trustworthy release information and recovery in one protected portal.**
+**Give engineers one place to find systems, their owners, operating instructions and release information.**
 
 [Business problem](#the-business-problem) · [Solution](#the-solution) · [Engineering strengths](#engineering-strengths) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
 
@@ -8,78 +8,68 @@
 
 ## The Business Problem
 
-As the platform grew, information about applications, background jobs, storage and recovery was spread across different places. Engineers needed a clear way to find who owned each part, how it worked and which version was running. The engineering portal also needed protected access and reliable backups.
+As the platform grew, information about applications, background tasks, storage and recovery became harder to find. Engineers needed to know who owned a system, how to operate it and which version was running.
+
+The site holding that information also needed protected access and reliable backups.
 
 ## The Solution
 
-Use Backstage to bring the service list, engineering handbook and release information together. Run the portal separately from the employee application, restrict engineer access with Microsoft sign-in, and save its database and handbook outside the server.
+I built an internal engineering portal using Backstage. It brings together a service directory, an engineering handbook and release information. Approved engineers sign in through Microsoft.
 
-**Business outcome:** Engineers have a clearer path from “what runs this service?” to its owner, operating instructions and release evidence. The portal has its own access and recovery controls, so it can support engineering work without becoming another route into employee records.
+**Business outcome:** Engineers can move from a system's name to its owner, instructions and release records in one place. The portal runs separately from the employee application and has its own backup and access controls.
 
 ## Engineering Strengths
 
-The portal connects discovery, controlled access and day-to-day operations. Each strength has an explicit purpose and supporting implementation.
-
-| Strength | Why it matters | Evidence in this project |
+| Capability | Why it matters | Details |
 | --- | --- | --- |
-| **A service catalog with ownership and dependencies** | Engineers can find who maintains a component and what it relies on before changing it or investigating a failure. | [Catalog entities](catalog/) and [catalog checks](tests/test_catalog.py) |
-| **Operating guidance beside the service** | TechDocs gives engineers a consistent place to find the handbook instead of searching disconnected files. The portal can read the published handbook but cannot change those files. | [Catalog and TechDocs](docs/CATALOG-AND-TECHDOCS.md) |
-| **Engineer access with explicit permissions** | Microsoft sign-in checks the engineer group, the backend matches the account, and application permissions control which actions are allowed. Optional template writing uses a separate identity and stays Off by default. | [Identity design](docs/IDENTITY.md) and [permission policy](reference/backend/permissionPolicy.ts) |
-| **Release status that refuses false certainty** | Missing, conflicting or old observations stay Unknown, Conflict or Stale. A green build is not presented as proof that a release is running. | [Actual evaluator](reference/releases/evaluate.py) and nine original tests |
-| **Recovery designed into operations** | Database inventories, checksums, off-host copies and an isolated restore helper make recovery inspectable. Handbook archives are downloaded again and verified. | [Recovery process](docs/RECOVERY.md) and [restore helper](runtime/vm/check-restore.sh) |
-| **Repeatable and cautious startup** | Fixed container versions, protected configuration files and startup checks catch known mistakes before the portal starts. Only the HTTPS edge publishes a port. | [Preflight](runtime/vm/preflight.py) and [Compose checks](runtime/vm/check-compose.py) |
-| **An intentional operating footprint** | The on-demand VM model fits occasional engineering sessions. Backup timers do not wake a stopped VM; shutdown and deallocation are explicit operating steps. | [Operations](docs/OPERATIONS.md) and [scaling/costs](docs/SCALING.md) |
-
-![Engineering strengths in the local reference viewer](docs/images/05-strengths.png)
-
-[How these strengths work together](docs/ENGINEERING-STRENGTHS.md) explains the practical value, source evidence and limits of each choice. The portal is a single-VM design, not a claim of high availability or measured recovery times.
+| A directory of systems and owners | Helps engineers find the responsible team and related services. | [Service directory](catalog/) |
+| Instructions beside each service | Makes operating guidance easier to find. | [Handbook](docs/CATALOG-AND-TECHDOCS.md) |
+| Separate access checks | Distinguishes signing in from permission to read or change something. | [Access guide](docs/IDENTITY.md) |
+| Honest release status | Shows when records are missing, conflicting or too old to trust. | [Release guide](docs/RELEASE-EVIDENCE.md) |
+| Checked backups | Supports recovery beyond merely uploading a backup file. | [Recovery guide](docs/RECOVERY.md) |
+| Planned operating sessions | Keeps occasional engineering use separate from an always-running service. | [Operations](docs/OPERATIONS.md) |
 
 ### Actual implementation and public reference
 
-This project includes the platform’s service list, startup and permission checks, Microsoft sign-in settings, container settings, backup tools, release checks and related Terraform. Identifying names, domains and target IDs use consistent examples. [Source mapping](docs/SOURCE-MAP.md).
-
-The local preview is a small new reference viewer, **not the Backstage application**. It reads the actual catalog structure and runs the actual Python release evaluator on fictional evidence. It requires no cloud credentials, login or provider call. Full private application dependencies, engineer rosters and secrets are deliberately outside this public example.
+The repository includes selected implementation code and a small local demonstration. The demonstration is not the full Backstage application; its example systems and release records are fictional.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  Engineer[Engineer browser] -->|HTTPS 443| Caddy[Caddy TLS edge]
-  Caddy -->|Forward authentication| Proxy[OAuth2 Proxy]
-  Proxy <-->|Separate ingress application / group gate| Entra[Microsoft Entra ID]
-  Caddy --> Backend[Backstage frontend + backend]
-  Backend <-->|Backend Microsoft provider / exact user mapping| Entra
-  Backend --> Policy[Read-oriented engineer permission policy]
-  Backend --> Catalog[Catalog and ownership]
-  Backend --> Docs[Read-only published TechDocs]
-  Backend --> PG[(PostgreSQL / internal Docker network)]
-  Evidence[Verified release records] --> Reader[Limited release reader]
-  Reader --> Backend
-  Backup[Pause writes and create verified backup] -->|VM managed identity| Blob[Restricted Blob backup container]
-  PG --> Backup
-  Docs --> Backup
+  Engineer[Approved engineer] --> SignIn[Microsoft sign-in]
+  SignIn --> Portal[Engineering portal]
+  Portal --> Directory[Systems and owners]
+  Portal --> Handbook[Operating instructions]
+  Portal --> Release[Release information]
+  Portal --> Database[Portal database]
+  Database --> Backup[Protected backup copies]
+  Handbook --> Backup
 ```
 
-Only the edge publishes port 443. PostgreSQL has no host port; Backstage and the proxy are reached through Docker networks. The chosen backup path uses a Storage service endpoint plus default-deny network rules and identity authorization. **It is not a deployed private endpoint.**
-
-The source also describes disabled managed-service alternatives. They are not the running VM architecture and are not commissioned by this repository. [Architecture and boundaries](docs/ARCHITECTURE.md).
+The deployed design uses one virtual server. A server failure can interrupt the portal, so backup and recovery remain important.
 
 ## What Was Built
 
-| Component | Purpose | Actual source |
-| --- | --- | --- |
-| Software catalog | Model services, resources, owners and dependencies | [Entities](catalog/) |
-| Backend startup boundary | Confirm whether the portal will run locally or in Azure, and require the matching settings | [Startup](reference/backend/index.ts) |
-| Engineering permissions | Allow approved engineers to read; require explicit permission for changes and template actions | [Policy](reference/backend/permissionPolicy.ts) |
-| Entra sign-in | Separate ingress and backend applications; map backend identity to catalog user annotation | [Configuration](reference/config/app-config.production.yaml) |
-| Four-service VM runtime | Edge, identity proxy, portal and private PostgreSQL network | [Compose](runtime/vm/compose.yaml) |
-| Safe startup checks | Reject mutable images, shared identity apps and exposed/missing secret files | [Preflight](runtime/vm/preflight.py) |
-| Release evaluator | Check that the release report, source version, saved file and current hosted version agree | [Evaluator](reference/releases/evaluate.py) |
-| Recoverable portal state | Tools to save a database backup, check its contents and practise restoring it separately | [Backup](runtime/vm/backup-postgres.sh) · [Restore](runtime/vm/check-restore.sh) |
-| Published handbook backup | Archive one saved publication tied to one exact version and verify downloaded file hashes | [TechDocs backup](runtime/vm/backup-techdocs.sh) |
-| VM infrastructure | Server access by key, HTTPS network rules, scheduled shutdown, limited image downloads and an optional backup location | [Terraform](infra/) |
+- A directory connecting systems to their owners and dependencies.
+- A handbook published separately from the portal that displays it.
+- Microsoft sign-in and application permission checks.
+- Release checks that compare the intended version with current deployment records.
+- Startup checks, database backups and tools for testing recovery.
+- Related Azure setup code and operating instructions.
+
+[Technical design](docs/ARCHITECTURE.md) and [source records](docs/SOURCE-MAP.md) explain the included implementation.
 
 ## Proof It Works
+
+Recorded checks included **nine release-status tests**, **ten startup tests on Linux**, **five directory checks** and **two infrastructure cases using simulated Azure responses**.
+
+The local viewer displayed 16 service-directory entries and all four release states: Verified, Unknown, Conflict and Stale. Its navigation and mobile layout were also checked.
+
+These results concern the included examples and selected code. They are separate from a new live sign-in, deployment or recovery rehearsal. [Full validation record](docs/VALIDATION.md).
+
+<details>
+<summary>For engineers: detailed results, examples and commands</summary>
 
 ### 1. Refuse incomplete or conflicting release evidence
 
@@ -120,31 +110,30 @@ python -B scripts/preview.py
 
 Open [the local reference viewer](http://127.0.0.1:8136). Switch between Service catalog, Release evidence and Operating model. Ctrl+C stops it. The screenshots are genuine local captures of this reference, not screenshots of the live Backstage portal. [Validation and scope](docs/VALIDATION.md).
 
+</details>
+
 ## Release and Recovery Process
 
-1. Build and test the selected complete Backstage workspace with its locked Node/Yarn/native-module combination.
-2. Scan the selected image and promote its exact registry digest; do not equate source HEAD with the deployed image.
-3. Prepare protected host inputs separately. Preflight the runtime before starting the stack.
-4. Verify trusted HTTPS, allowed engineer sign-in, denied nonmember access, catalog, handbook and database health.
-5. Back up plugin databases and handbook publications, verify off-host bytes and rehearse restoration separately.
-6. Stop the session and deallocate the VM; keep retained disk/IP/storage costs visible.
+1. Build and test the chosen version.
+2. Check its software security findings and use that exact version for release.
+3. Check the server settings before starting the portal.
+4. Confirm approved sign-in, service listings, handbook access and database health.
+5. Save and verify backups, and test restoration separately.
+6. End the engineering session and release the server's compute allocation.
 
-The Dockerfile here is an actual build recipe excerpt. It expects full-workspace skeleton/bundle archives and the lockfile that this public subset does not contain. No new image build or live upgrade is claimed. [Deployment detail](docs/DEPLOYMENT.md).
+[Deployment steps](docs/DEPLOYMENT.md) and [recovery steps](docs/RECOVERY.md) provide the technical instructions.
 
 ## Security and Operational Boundaries
 
-- Microsoft sign-in, account matching, application permissions and Azure service identities protect different parts of the system.
-- A catalog ownership group is metadata, not an Entra membership or access grant.
-- Compose secrets mount protected host files; this does not itself make them Key Vault-backed.
-- The optional template writer uses a separate identity/key and approved actions; it is Off in the default profile. Catalog reads do not require a general repository writer.
-- The portal is not the business API, employee database, SIEM or an automatic production deployer.
-- A completed backup upload is not sufficient recovery proof. Preserve credentials/TLS state through a separate protected recovery process.
+Signing in does not automatically grant permission to change services or publish software. The service directory also describes ownership; it does not itself grant access.
+
+The local demonstration does not connect to the employee database or run a production deployment. Restoring the portal requires its configuration and protected credentials as well as the database backup.
 
 ## Scaling, Costs and Tradeoffs
 
-One VM keeps occasional engineering sessions simple to operate, but a VM failure can interrupt the whole portal. Consistent backups also require brief backend pauses. Deallocation stops compute billing, not disk, static IP, registry or backup storage charges. A shutdown schedule is a safety net, not a spending cap.
+One server is straightforward to operate for occasional engineering sessions, but it does not provide continuous availability during a server failure. Backups also require brief pauses to database writes.
 
-Scale from measured catalog/search latency, documentation access, database growth and concurrent engineers. Managed PostgreSQL, external private TechDocs storage, multiple backend instances and shared sessions require coordinated networking, identity and recovery work; they are not live features of this reference. [Scaling and tradeoffs](docs/SCALING.md).
+Releasing the server's compute allocation stops that compute charge. Retained disks, addresses and storage can still cost money. For sustained use, measure response times and the number of engineers before considering more servers or managed database services. [Growth options](docs/SCALING.md).
 
 ## Project Guides
 
