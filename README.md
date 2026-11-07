@@ -18,17 +18,33 @@ I built an internal engineering portal using Backstage. It brings together a ser
 
 **Business outcome:** Engineers can move from a system's name to its owner, instructions and release records in one place. The portal runs separately from the employee application and has its own backup and access controls.
 
+## Tools Used and What They Do
+
+| Tool or service | What it does | Where it fits |
+| --- | --- | --- |
+| Backstage and TechDocs | Provide the service catalog and engineering handbook. | Actual engineering portal; the Python preview is a separate offline example. |
+| Docker Compose | Run the portal and its supporting services together. | Actual VM stack definition, not started by the local viewer. |
+| Caddy | Serve HTTPS at the front of the portal. | Actual ingress service. |
+| OAuth2 Proxy and Microsoft Entra ID | Check ingress sign-in and map the engineer to an approved identity. | Ingress and Backstage identity checks are separate layers. |
+| PostgreSQL | Keep portal/plugin data on persistent storage. | Actual portal database; distinct from the business application’s Azure SQL. |
+| GitHub Apps | Read approved catalog/release sources and keep proposal-writing authority separate. | Actual scoped integrations; repository read access is not repository write access. |
+| Yarn and Corepack | Select the package manager used when building Backstage. | Build-time utilities; not authentication controls. |
+| pg_dumpall, gzip and SHA-256 utilities | Create the database dump, compress it and record a file fingerprint. | Actual backup helpers; the saved inventory adds a separate comparison. |
+| AzCopy | Upload protected backup material using managed identity. | Operational utility; no backup upload occurs in the offline preview. |
+
+Terraform describes selected host/network boundaries. GitHub Actions supports build and verification processes, while the public manual-only workflow runs reference checks rather than operating the live portal.
+
 ## Step by Step
 
 A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
 
-1. **Sign in to the portal** — An approved engineer signs in through Microsoft. The portal separately checks which actions that person may perform.
+1. **Sign in to the portal (Entra and OAuth2 Proxy)** — An approved engineer signs in through Microsoft. The portal separately checks which actions that person may perform.
 
-2. **Find the system and its owner** — The service directory connects each system to its responsible team and related services. The engineer can then open its operating instructions.
+2. **Find the system and its owner (Backstage and TechDocs)** — The service directory connects each system to its responsible team and related services. The engineer can then open its operating instructions.
 
 3. **Review release information** — The portal compares release records with a recent observation of what is running. Missing, conflicting or old information stays visibly uncertain.
 
-4. **Protect the portal itself** — The operating process saves and checks backups before ending an engineering session. A separate restore test checks whether the required records and settings can be recovered.
+4. **Protect the portal itself (Backup helpers and AzCopy)** — The operating process saves and checks backups before ending an engineering session. A separate restore test checks whether the required records and settings can be recovered.
 
 ## Engineering Strengths
 
