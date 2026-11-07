@@ -147,6 +147,10 @@ One server is straightforward to operate for occasional engineering sessions, bu
 
 Releasing the server's compute allocation stops that compute charge. Retained disks, addresses and storage can still cost money. For sustained use, measure response times and the number of engineers before considering more servers or managed database services. [Growth options](docs/SCALING.md).
 
+## Troubleshooting Lessons
+
+A successful backup command could intentionally skip a stopped session. Fresh backup evidence, database readiness and completed guest-script phases needed separate verification. [Read the incident, evidence and verification](docs/LESSONS-LEARNED.md).
+
 ## Project Guides
 
 | Guide | What it explains |
