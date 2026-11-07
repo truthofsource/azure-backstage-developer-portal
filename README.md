@@ -2,7 +2,7 @@
 
 **Give engineers one place to find systems, their owners, operating instructions and release information.**
 
-[Business problem](#the-business-problem) · [Solution](#the-solution) · [Engineering strengths](#engineering-strengths) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
+[Business problem](#the-business-problem) · [Solution](#the-solution) · [Engineering strengths](#engineering-strengths) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md) · [Step by step](#step-by-step)
 
 ![Local catalog reference](docs/images/01-catalog.png)
 
@@ -17,6 +17,18 @@ The site holding that information also needed protected access and reliable back
 I built an internal engineering portal using Backstage. It brings together a service directory, an engineering handbook and release information. Approved engineers sign in through Microsoft.
 
 **Business outcome:** Engineers can move from a system's name to its owner, instructions and release records in one place. The portal runs separately from the employee application and has its own backup and access controls.
+
+## Step by Step
+
+A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
+
+1. **Sign in to the portal** — An approved engineer signs in through Microsoft. The portal separately checks which actions that person may perform.
+
+2. **Find the system and its owner** — The service directory connects each system to its responsible team and related services. The engineer can then open its operating instructions.
+
+3. **Review release information** — The portal compares release records with a recent observation of what is running. Missing, conflicting or old information stays visibly uncertain.
+
+4. **Protect the portal itself** — The operating process saves and checks backups before ending an engineering session. A separate restore test checks whether the required records and settings can be recovered.
 
 ## Engineering Strengths
 
