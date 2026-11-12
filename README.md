@@ -8,9 +8,11 @@
 
 ## The Business Problem
 
-As the platform grew, information about applications, background tasks, storage and recovery became harder to find. Engineers needed to know who owned a system, how to operate it and which version was running.
+Operating the platform involves more than its employee-facing website. Engineers also need to understand background workers, storage, integrations, deployment records and recovery procedures. When that information is spread across repository folders and operating notes, answering a basic question such as who owns a service can require several searches.
 
-The site holding that information also needed protected access and reliable backups.
+That becomes more costly during an incident or handoff: the operator needs the correct instructions and release evidence while the affected service may already be unavailable. Outdated or hard-to-find guidance can lead to a wrong recovery step. The engineering portal itself also holds operational information and needs protected access and a recoverable configuration.
+
+The business need was one engineering entry point connecting services to their owners, handbook pages and release records, with its own access and recovery boundaries.
 
 ## The Solution
 
