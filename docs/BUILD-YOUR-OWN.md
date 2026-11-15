@@ -1,106 +1,206 @@
-# Build your own: Backstage Developer Portal on Azure
+# Build your own from scratch: Azure Backstage Developer Portal
 
-This is a step-by-step build guide for an independent learning copy. Follow the numbered steps in order and record your own results. The included local implementation is not a complete deployment of the private business platform; cloud extensions are separate and must use your own authorized resources.
+Your own local Backstage portal with a catalog component and a TechDocs page you authored.
 
-## What you will create
+Start with a new folder, your own files and your own accounts. The numbered steps below describe the build; no portfolio repository checkout is required. The existing implementation/evidence elsewhere in this repository is a separate reference, not a claim that your new build has already passed.
 
-Local catalog/release-reference checks; no running portal VM or engineer sign-in.
+## Prerequisites
 
-## Prerequisites and working locations
+A Unix-like development environment/WSL, a Node/Yarn release supported by the selected Backstage generator, build tools and Git. The starter is a development portal, not a secured production VM installation.
 
-| Location | What you need |
-| --- | --- |
-| Your workstation | Git and the runtime versions documented in [the command guide](COMMANDS.md); use its package/lockfile instructions. |
-| Bash, Linux or WSL terminal | The commands below use Bash syntax. Prepare Python 3.12; use the project's pinned dependency files. |
-| PowerShell alternative | Use the PowerShell forms in the command guide, or run this Bash recipe in WSL; do not paste Bash loops into PowerShell. |
-| Azure or external service | Not needed for default local tests. Any cloud extension requires your own account, target, permissions, budget and acceptance plan. |
+Use Bash on Linux/macOS/WSL for Bash blocks and PowerShell for PowerShell blocks. Select the tool versions supported by the official sources below, record the versions you actually install and retain generated dependency locks. Cloud resources, scanner downloads, logs and external AI calls can create costs; review the stated scope before enabling them.
 
-Read [the existing validation scope](VALIDATION.md) before running anything. A recorded historical test result is not evidence that your new copy has passed.
+## Create your project folder
 
-## Step 1: Create your own workspace
-
-**Where:** your workstation, in a new project folder.
-
-1. Clone the public source below into a new directory; keep the source attribution and included license terms. This creates your local learning copy, not cloud resources.
-2. Record the selected commit and tool versions before editing. If you later publish a fork, review any origin, hash or target bindings rather than disabling guards to make the fork pass.
+Choose a new folder name. These first commands create a blank project; an optional `git init` gives it its own history. Create parent directories in your editor when a later step introduces a nested file.
 
 ```bash
-git clone https://github.com/truthofsource/azure-backstage-developer-portal.git
-cd azure-backstage-developer-portal
-git rev-parse HEAD
-git rev-parse --show-toplevel
-git status --short
+mkdir my-azure-backstage-developer-portal
+cd my-azure-backstage-developer-portal
+git init
 ```
 
-**Expected result:** the project files are present and you can identify the starting source. Continue from this repository root unless a command explicitly changes directory.
+Create `.gitignore` before saving credentials or build outputs:
 
-## Step 2: Prepare dependencies and build the local baseline
+```gitignore
+.venv/
+node_modules/
+.env
+.env.*
+local.settings.json
+credentials.json
+token.json
+*.pem
+*.key
+*.tfstate*
+*.tfplan
+.terraform/
+private*/
+captures/
+backups/
+batch.json
+reports/
+out/
+app-config.local.yaml
+```
 
-**Where:** the same workstation terminal.
+The source/file snippets are a starting implementation you type or paste into the named files. Replace `YOUR_*`, names, regions and addresses only with values from your own lab; do not place real client/employee records in a test project. Keep your terminal in this project root unless a step explicitly changes directory.
 
-1. Follow the runtime instructions and install only the dependencies selected by this project's files. Terraform provider downloads, optional browser downloads and scanner databases are separate prerequisites where the detailed guide identifies them.
-2. Run these source-derived baseline commands one at a time and stop on an unexpected failure. Read any skipped integration cases; a skip is not a successful live check.
+Before a first commit, set your own repository-local author with `git config user.name "YOUR_NAME"` and `git config user.email "YOUR_PUBLIC_COMMIT_EMAIL"`. Review `git status --short` and the staged diff before publishing; ignored local files are not a substitute for reviewing what you upload.
+
+## Step 1 — Generate your own portal
+
+**Where:** A parent folder on your workstation.
+
+Run the official Backstage app generator and choose your own app name, such as my-engineering-portal. Record the generator/package versions and keep the generated lockfile.
 
 ```bash
-python3 -B -m unittest discover -s tests -v
-python3 -B scripts/demo.py
+npx @backstage/create-app@latest
 ```
 
-**Expected result:** the selected tests finish without unexpected failures, and a demonstration command, where provided, produces fictional local decisions. These commands reproduce the included lab scope; they do not commission the live platform.
+**Check before continuing:** A new application folder is created, independently of this portfolio repository.
 
-## Step 3: Make one project-specific change
+## Step 2 — Start and inspect the generated app
 
-**Where:** your editor, in your own local copy.
+**Where:** Your generated portal folder.
 
-1. Start with [`tests/test_catalog.py`](../tests/test_catalog.py) and the matching test or configuration instructions. Add a catalog ownership or missing-document case while leaving template writes and external credentials disabled.
-2. Save your new case separately from the original acceptance records, then rerun the affected tests and the baseline. Do not edit recorded scanner results, screenshots or validation counts to manufacture a successful outcome.
-
-**Expected result:** you can explain what you changed, why the result changed and which negative case still fails safely. An unexpected failure means investigate the implementation or setup, not remove the failing check.
-
-## Step 4: Verify behavior and capture your own evidence
-
-**Where:** the test output, local viewer where supplied, and your private evidence folder.
-
-1. If the project supplies a viewer, use its startup command in [the command guide](COMMANDS.md); keep long-running preview servers in a separate terminal. Follow its exact loopback address and stop it with Ctrl+C when finished; for a command-line-only example, inspect its terminal output and generated files instead.
-2. Compare your own output with [the proof and limits](../README.md#proof-it-works), then record source version, command, expected result, observed result and unresolved work. Capture screenshots of your own fictional output rather than presenting the existing screenshots as your execution.
-
-**Expected result:** Local catalog/release-reference checks; no running portal VM or engineer sign-in. Your evidence must say whether it covers local logic, a real tool run, a hosted service or a human observation.
-
-### Start the local preview
-
-Open a second terminal in the same repository root printed by `git rev-parse --show-toplevel`. Run the command below from that root, after the baseline has passed; it stays running while you use the preview.
+Install the generated dependencies with its documented Yarn version, then start it. Open the local URL printed by the process, normally localhost:3000, and confirm the backend is also running.
 
 ```bash
-python3 -B scripts/preview.py
+cd my-engineering-portal
+yarn install
+yarn start
 ```
 
-Open [http://127.0.0.1:8136](http://127.0.0.1:8136). Use the exact hostname shown here; a localhost address and a 127.0.0.1 address are not interchangeable for every project's host checks.
+**Check before continuing:** You can see your own development catalog.
 
-The command uses the same Python environment as the baseline where Python is required. This guide uses an explicit virtual-environment executable rather than activating it; when following other project examples that say `python`, use that same executable if the project has a `.venv`. In WSL, keep the clone and its virtual environment in the same Linux environment; do not reuse a Windows `.venv`.
+## Step 3 — Define a component you own
 
-Keep one preview per listening port. Stop your own earlier preview with Ctrl+C before starting another one on that port, or use only a port override documented by the project. If you stop the preview, rerun only its startup command; you do not need to rebuild or redeploy cloud services.
+**Where:** my-engineering-portal/catalog-info.yaml.
 
-## Step 5: Plan an independent cloud extension, if needed
+Create a catalog entity with your own owner and service name. The example owner group must also exist in your catalog, or you should replace it with a valid existing owner.
 
-**Where:** your own architecture/configuration files first; a separately authorized lab subscription only later.
+Create **`catalog-info.yaml`** with the following contents:
 
-1. Read the implementation and infrastructure references linked below. Substitute your own names, identities, address ranges and service settings in an isolated environment; a public reference may contain only selected components and is not authority to apply someone else's production state.
-2. List the missing integrations and acceptance checks before deployment: runtime hosting, permissions, network/DNS paths, secrets, source data, notification or provider access as applicable. Keep disabled examples disabled until their specific dependencies, costs and cleanup are understood.
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: my-operations-api
+  description: My independently built operations API
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: group:default/my-platform-team
+```
 
-**Expected result:** a scoped extension plan with owners and explicit acceptance criteria, not a claim that the full service is deployed. No cloud `apply`, scanner targeting, paid operation or provider sign-in is implied by the local recipe.
+**Check before continuing:** The component has a meaningful owner, lifecycle and documentation annotation.
 
-- [Architecture](ARCHITECTURE.md)
-- [Deployment](DEPLOYMENT.md)
-- [Operations](OPERATIONS.md)
-- [Validation](VALIDATION.md)
-- [Source Map](SOURCE-MAP.md)
-- [Lessons Learned](LESSONS-LEARNED.md)
+## Step 4 — Create the owner and documentation
 
-## Step 6: Troubleshoot, close out and explain what you built
+**Where:** Your portal files.
 
-**Where:** your project folder and the operating guide for any environment you actually created.
+Create team.yaml below, mkdocs.yml below and docs/index.md with your own service purpose, startup steps and recovery owner. This is operational documentation, not just a link to a repository.
 
-1. Check the failing stage in order: working directory and runtime, dependencies, test input, configuration, then any separately enabled service. Preserve the error and consult the existing troubleshooting lessons before widening permissions or changing the target.
-2. Stop only the viewers/containers you started, retain your useful evidence and remove only resources belonging to your own reviewed lab. A local-only run needs no cloud deletion; if you created cloud resources, verify residual storage/address/monitoring charges rather than assuming compute stop removes all cost.
+Create **`team.yaml`** with the following contents:
 
-**Finish checklist:** explain the business problem, show your own change and verification, describe one failure/recovery case, identify limitations and name the next owner action. Keep credentials and business records out of public commits and screenshots.
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: my-platform-team
+spec:
+  type: team
+  children: []
+```
+
+Create **`mkdocs.yml`** with the following contents:
+
+```yaml
+site_name: My operations API
+nav:
+  - Home: index.md
+plugins:
+  - techdocs-core
+```
+
+Create **`docs/index.md`** with the following contents:
+
+```markdown
+# My operations API
+
+Owner: my-platform-team
+
+## Start
+Record your own startup procedure here.
+
+## Recover
+Record the tested recovery procedure and escalation contact.
+```
+
+**Check before continuing:** The owner and documentation source exist.
+
+## Step 5 — Register the files and build docs
+
+**Where:** app-config.local.yaml and Backstage catalog.
+
+Merge the file locations below into app-config.local.yaml, replacing the placeholders with absolute paths to your own files and retaining other generated settings. Configure the local TechDocs builder and its Docker/MkDocs prerequisites, then open the entity and its Docs tab.
+
+Create **`app-config.local.yaml (merge into the generated file)`** with the following contents:
+
+```yaml
+catalog:
+  locations:
+    - type: file
+      target: /YOUR_ABSOLUTE_PROJECT_PATH/catalog-info.yaml
+    - type: file
+      target: /YOUR_ABSOLUTE_PROJECT_PATH/team.yaml
+```
+
+**Check before continuing:** Your component is owned and the handbook page renders; a catalog entry alone is not TechDocs proof.
+
+## Step 6 — Verify boundaries before hosting
+
+**Where:** Your test notes.
+
+Check a missing owner/document path and record the actual error and recovery. Before moving to a VM, separately configure Entra sign-in, restricted engineer access, HTTPS, persistent database, secrets, backup and a tested restore path.
+
+**Check before continuing:** The local portal works and the outstanding production requirements are explicit.
+
+## Step 7 — Close the local build
+
+**Where:** Your terminal.
+
+Stop Yarn with Ctrl+C and retain your app source/lockfile and screenshots of the entity and docs. Keep OAuth credentials, private rosters and environment files out of Git.
+
+**Check before continuing:** You have built your own catalog/documentation portal rather than running another person's checkout.
+
+## Verification and your own screenshots
+
+| Evidence | What to record | Your result |
+| --- | --- | --- |
+| New build | Your own files/resource settings and tool versions | Not yet recorded |
+| Working path | The actual successful request, configuration or recovery result | Not yet recorded |
+| Failure boundary | A meaningful denied, malformed, stale or failed case | Not yet recorded |
+| Recovery / cleanup | What you restored or removed and what remains billed | Not yet recorded |
+
+Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. Existing portfolio images are references, not evidence that you performed these steps.
+
+## Troubleshooting order
+
+1. Confirm the named file, working directory and selected tool/interpreter.
+2. Check the exact input and resource/account selected for the failing step.
+3. Separate identity permission, network/DNS reachability and application validation.
+4. Keep the actual error and reconcile an unknown write outcome before repeating it; do not widen access or repeat paid operations blindly.
+
+The numbered steps describe a build procedure. Local syntax checks, an accepted API request, a completed hosted operation and a human verification are different evidence levels; fill in the verification table with what you actually observed.
+
+## Official implementation references
+
+- [backstage.io — npx-create-app](https://backstage.io/docs/golden-path/create-app/npx-create-app/)
+- [backstage.io — descriptor-format](https://backstage.io/docs/features/software-catalog/descriptor-format/)
+- [backstage.io — creating-and-publishing](https://backstage.io/docs/features/techdocs/creating-and-publishing/)
+
+The walkthrough layout follows the prerequisites → creation/configuration → test → verification → troubleshooting → cleanup pattern of the [Splunk project reference](https://github.com/davidharris6/splunk-siem-log-analysis). Its Splunk-specific settings are not copied into unrelated projects.
