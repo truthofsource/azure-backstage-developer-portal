@@ -38,6 +38,19 @@ Terraform describes selected host/network boundaries. GitHub Actions supports bu
 
 ## Step by Step
 
+Build an independent version with the [reader-operated walkthrough](docs/BUILD-YOUR-OWN.md). It gives prerequisites, working locations, numbered actions, source-derived commands, expected results, verification and cleanup.
+
+For this project, your working starting point is [`tests/test_catalog.py`](tests/test_catalog.py). Expected scope: Local catalog/release-reference checks; no running portal VM or engineer sign-in.
+
+1. **Create your own workspace.** Copy the project and record the source version before editing.
+2. **Prepare and run the baseline.** Use the documented runtimes and selected dependencies, then run the local checks.
+3. **Make your own change.** Edit a project-specific fixture, configuration or rule and rerun its positive and negative cases.
+4. **Verify and document your result.** Capture your own evidence and distinguish a local example from a live integration.
+5. **Extend and close out deliberately.** Plan any independent cloud work separately and clean up only what you created.
+
+<details>
+<summary>How the underlying platform process works</summary>
+
 A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
 
 1. **Sign in to the portal (Entra and OAuth2 Proxy)** — An approved engineer signs in through Microsoft. The portal separately checks which actions that person may perform.
@@ -47,6 +60,8 @@ A short walkthrough of the process, with technical instructions and evidence lim
 3. **Review release information** — The portal compares release records with a recent observation of what is running. Missing, conflicting or old information stays visibly uncertain.
 
 4. **Protect the portal itself (Backup helpers and AzCopy)** — The operating process saves and checks backups before ending an engineering session. A separate restore test checks whether the required records and settings can be recovered.
+
+</details>
 
 ## Engineering Strengths
 
