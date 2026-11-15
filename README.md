@@ -1,10 +1,12 @@
 # Backstage Developer Portal on Azure
 
+[![Backstage developer portal — illustrated overview](docs/diagrams/architecture.png)](docs/diagrams/architecture.svg)
+
+[View SVG](docs/diagrams/architecture.svg) · [Download PNG](docs/diagrams/architecture.png) · [Edit in draw.io](docs/diagrams/architecture.drawio)
+
 **Give engineers one place to find systems, their owners, operating instructions and release information.**
 
 [Business problem](#the-business-problem) · [Solution](#the-solution) · [Engineering strengths](#engineering-strengths) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md) · [Step by step](#step-by-step)
-
-![Local catalog reference](docs/images/01-catalog.png)
 
 ## The Business Problem
 
@@ -243,7 +245,7 @@ Stop Yarn with Ctrl+C and retain your app source/lockfile and screenshots of the
 | Failure boundary | A meaningful denied, malformed, stale or failed case | Not yet recorded |
 | Recovery / cleanup | What you restored or removed and what remains billed | Not yet recorded |
 
-Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. Existing portfolio images are references, not evidence that you performed these steps.
+Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. The architecture diagram explains the design; record your own results rather than treating it as execution evidence.
 
 ### Troubleshooting order
 
@@ -296,17 +298,7 @@ The repository includes selected implementation code and a small local demonstra
 
 ## Architecture
 
-```mermaid
-flowchart LR
-  Engineer[Approved engineer] --> SignIn[Microsoft sign-in]
-  SignIn --> Portal[Engineering portal]
-  Portal --> Directory[Systems and owners]
-  Portal --> Handbook[Operating instructions]
-  Portal --> Release[Release information]
-  Portal --> Database[Portal database]
-  Database --> Backup[Protected backup copies]
-  Handbook --> Backup
-```
+[View the illustrated project overview](docs/diagrams/architecture.svg).
 
 The deployed design uses one virtual server. A server failure can interrupt the portal, so backup and recovery remain important.
 
@@ -341,8 +333,6 @@ python -B scripts/demo.py
 
 **Look for:** nine original evaluator tests pass; the demonstration produces Verified, Unknown, Conflict and Stale for four fictional scenarios. A successful Actions run or historical pin alone never establishes a current deployment.
 
-![Release-evidence reference](docs/images/02-evidence.png)
-
 ### 2. Check startup and network boundaries
 
 ```bash
@@ -369,7 +359,7 @@ terraform -chdir=infra test
 python -B scripts/preview.py
 ```
 
-Open [the local reference viewer](http://127.0.0.1:8136). Switch between Service catalog, Release evidence and Operating model. Ctrl+C stops it. The screenshots are genuine local captures of this reference, not screenshots of the live Backstage portal. [Validation and scope](docs/VALIDATION.md).
+Open [the local reference viewer](http://127.0.0.1:8136). Switch between Service catalog, Release evidence and Operating model. Ctrl+C stops it. Proper Backstage and Azure screenshots are deferred; the local reference remains available to run. [Validation and scope](docs/VALIDATION.md).
 
 </details>
 
