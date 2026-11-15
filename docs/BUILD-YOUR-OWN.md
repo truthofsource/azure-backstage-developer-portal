@@ -6,7 +6,7 @@ Start with a new folder, your own files and your own accounts. The numbered step
 
 ## Prerequisites
 
-A Unix-like development environment/WSL, a Node/Yarn release supported by the selected Backstage generator, build tools and Git. The starter is a development portal, not a secured production VM installation.
+A Unix-like development environment/WSL, a Node/Yarn release supported by the selected Backstage generator, build tools and Git. The starter is a development portal, not a secured production VM installation. The Docker-based TechDocs configuration below additionally needs a reachable Linux Docker engine; an installed CLI alone is insufficient.
 
 Use Bash on Linux/macOS/WSL for Bash blocks and PowerShell for PowerShell blocks. Select the tool versions supported by the official sources below, record the versions you actually install and retain generated dependency locks. Cloud resources, scanner downloads, logs and external AI calls can create costs; review the stated scope before enabling them.
 
@@ -146,7 +146,7 @@ Record the tested recovery procedure and escalation contact.
 
 **Where:** app-config.local.yaml and Backstage catalog.
 
-Merge the file locations below into app-config.local.yaml, replacing the placeholders with absolute paths to your own files and retaining other generated settings. Configure the local TechDocs builder and its Docker/MkDocs prerequisites, then open the entity and its Docs tab.
+Merge the file locations and development TechDocs settings below into app-config.local.yaml, replacing the placeholders with absolute paths and retaining other generated settings. Confirm Docker Client and Server are available, stop/restart yarn start after the configuration change, then open your component and its Docs tab.
 
 Create **`app-config.local.yaml (merge into the generated file)`** with the following contents:
 
@@ -157,7 +157,24 @@ catalog:
       target: /YOUR_ABSOLUTE_PROJECT_PATH/catalog-info.yaml
     - type: file
       target: /YOUR_ABSOLUTE_PROJECT_PATH/team.yaml
+techdocs:
+  builder: local
+  generator:
+    runIn: docker
+  publisher:
+    type: local
 ```
+
+```bash
+docker version
+# In the original portal terminal, press Ctrl+C to stop its previous run.
+# From your generated app folder, restart it with the merged configuration:
+yarn start
+```
+
+The generator may pull its TechDocs builder image; record that image/version for your lab. Local builder/publisher settings are a development choice and do not establish hosted access control or durable published-doc storage.
+
+Keep only one catalog key and one techdocs key at the YAML top level; merge their nested settings rather than appending duplicate keys. If configuration parsing fails, correct that file before restarting instead of changing unrelated permissions.
 
 **Check before continuing:** Your component is owned and the handbook page renders; a catalog entry alone is not TechDocs proof.
 
@@ -202,5 +219,7 @@ The numbered steps describe a build procedure. Local syntax checks, an accepted 
 - [backstage.io — npx-create-app](https://backstage.io/docs/golden-path/create-app/npx-create-app/)
 - [backstage.io — descriptor-format](https://backstage.io/docs/features/software-catalog/descriptor-format/)
 - [backstage.io — creating-and-publishing](https://backstage.io/docs/features/techdocs/creating-and-publishing/)
+- [backstage.io — configuration](https://backstage.io/docs/features/techdocs/configuration/)
+- [backstage.io — getting-started](https://backstage.io/docs/features/techdocs/getting-started/)
 
 The walkthrough layout follows the prerequisites → creation/configuration → test → verification → troubleshooting → cleanup pattern of the [Splunk project reference](https://github.com/davidharris6/splunk-siem-log-analysis). Its Splunk-specific settings are not copied into unrelated projects.
